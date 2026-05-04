@@ -180,7 +180,7 @@
 <h3 class="text-headline-md serif text-primary">Detailed Logs</h3>
 <p class="text-body-md text-on-surface-variant">Archival measurements recorded during pediatric visits.</p>
 </div>
-<button class="px-6 py-2 border border-primary text-primary text-sm font-bold rounded hover:bg-primary hover:text-on-primary transition-colors" @click="$router.push({ name: 'archive-export-page' })">
+<button class="px-6 py-2 border border-primary text-primary text-sm font-bold rounded hover:bg-primary hover:text-on-primary transition-colors">
                                 Export PDF Report
                             </button>
 </div>
@@ -241,18 +241,18 @@
 <p class="text-label-caps text-secondary mb-4 uppercase tracking-widest font-bold">The Journey Continues</p>
 <h3 class="text-display-lg serif text-primary mb-8">Building a Legacy</h3>
 <div class="flex gap-4 justify-center">
-<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold hover:opacity-90 transition-opacity" @click="$router.push({ name: 'growth-tracker-page' })">Add Measurement</button>
-<button class="border border-outline text-primary px-8 py-3 rounded-lg font-bold hover:bg-surface-container transition-colors" @click="$router.push({ name: 'milestones-page' })">Log Milestone</button>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold hover:opacity-90 transition-opacity">Add Measurement</button>
+<button class="border border-outline text-primary px-8 py-3 rounded-lg font-bold hover:bg-surface-container transition-colors">Log Milestone</button>
 </div>
 </section>
 </main>
 <!-- Bottom Navigation -->
 <nav class="flex justify-between items-center px-40 py-6 border-t border-outline-variant bg-surface-container-low">
 <div class="flex gap-8">
-<RouterLink class="text-sm font-bold text-primary hover:underline" :to="{ name: 'dashboard-page' }">Dashboard</RouterLink>
-<RouterLink class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" :to="{ name: 'milestones-page' }">Milestones</RouterLink>
-<RouterLink class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" :to="{ name: 'achievements-page' }">Gallery</RouterLink>
-<RouterLink class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" :to="{ name: 'family-portal-page' }">Messages</RouterLink>
+<a class="text-sm font-bold text-primary hover:underline" href="#">Dashboard</a>
+<a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="#">Milestones</a>
+<a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="#">Gallery</a>
+<a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="#">Messages</a>
 </div>
 <p class="text-sm text-on-surface-variant">© 2024 Little by Little Portfolio</p>
 </nav>
@@ -263,7 +263,7 @@
 
 <script>
 export default {
-    name: 'Screen5'
+    name: 'MilestonesPage'
 }
 </script>
 

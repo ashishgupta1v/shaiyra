@@ -139,7 +139,7 @@
 <h2 class="text-on-surface text-headline-md font-display-lg mb-4">Family Stories</h2>
 <p class="text-on-surface-variant text-body-lg">Enduring narratives and hand-written fragments passed down through generations, curated for the future.</p>
 </div>
-<button class="text-label-caps text-primary border-b border-primary pb-1 hover:text-on-primary-container hover:border-on-primary-container transition-colors">EXPLORE ARCHIVE</button>
+<button class="text-label-caps text-primary border-b border-primary pb-1 hover:text-on-primary-container hover:border-on-primary-container transition-colors" @click="$router.push({ name: 'letters-archive-page' })">EXPLORE ARCHIVE</button>
 </div>
 <div class="grid grid-cols-2 gap- gutter">
 <!-- Story Card 1 -->
@@ -184,6 +184,7 @@
 </div>
 </div>
 </div>
+    </div>
 </template>
 
 <script>

@@ -50,18 +50,18 @@
 </div>
 <div class="pb-3">
 <div class="flex border-b border-[#d5d9e2] px-4 gap-8">
-<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#5d6d89] pb-[13px] pt-4" href="#">
+<RouterLink class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#5d6d89] pb-[13px] pt-4" :to="{ name: 'home-page' }">
 <p class="text-[#5d6d89] text-sm font-bold leading-normal tracking-[0.015em]">Age 2</p>
-</a>
-<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#5d6d89] pb-[13px] pt-4" href="#">
+</RouterLink>
+<RouterLink class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#5d6d89] pb-[13px] pt-4" :to="{ name: 'life-feed-page' }">
 <p class="text-[#5d6d89] text-sm font-bold leading-normal tracking-[0.015em]">Age 3</p>
-</a>
-<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#5d6d89] pb-[13px] pt-4" href="#">
+</RouterLink>
+<RouterLink class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#5d6d89] pb-[13px] pt-4" :to="{ name: 'life-journey-page' }">
 <p class="text-[#5d6d89] text-sm font-bold leading-normal tracking-[0.015em]">Age 4</p>
-</a>
-<a class="flex flex-col items-center justify-center border-b-[3px] border-b-[#1a2b48] text-[#111318] pb-[13px] pt-4" href="#">
+</RouterLink>
+<RouterLink class="flex flex-col items-center justify-center border-b-[3px] border-b-[#1a2b48] text-[#111318] pb-[13px] pt-4" :to="{ name: 'achievements-page' }">
 <p class="text-[#111318] text-sm font-bold leading-normal tracking-[0.015em]">Current</p>
-</a>
+</RouterLink>
 </div>
 </div>
 <!-- Main Content Area with Style Guidance applied -->
@@ -159,6 +159,7 @@
 </div>
 </div>
 </div>
+    </div>
 </template>
 
 <script>

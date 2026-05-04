@@ -57,18 +57,18 @@
 <!-- Navigation Tabs -->
 <nav class="sticky top-[68px] z-40 bg-background/90 backdrop-blur-sm border-b border-surface-variant">
 <div class="flex px-4 gap-12 justify-center">
-<RouterLink class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-4 pt-5" :to="{ name: 'wellness-archive-page' }">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-4 pt-5" href="#">
 <span class="text-xs font-bold tracking-widest uppercase">Check-ups</span>
-</RouterLink>
-<RouterLink class="flex flex-col items-center justify-center border-b-2 border-transparent text-outline hover:text-primary transition-colors pb-4 pt-5" :to="{ name: 'growth-tracker-page' }">
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-outline hover:text-primary transition-colors pb-4 pt-5" href="#">
 <span class="text-xs font-bold tracking-widest uppercase">Vaccinations</span>
-</RouterLink>
-<RouterLink class="flex flex-col items-center justify-center border-b-2 border-transparent text-outline hover:text-primary transition-colors pb-4 pt-5" :to="{ name: 'wellness-archive-page' }">
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-outline hover:text-primary transition-colors pb-4 pt-5" href="#">
 <span class="text-xs font-bold tracking-widest uppercase">General Wellness</span>
-</RouterLink>
-<RouterLink class="flex flex-col items-center justify-center border-b-2 border-transparent text-outline hover:text-primary transition-colors pb-4 pt-5" :to="{ name: 'letters-archive-page' }">
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-outline hover:text-primary transition-colors pb-4 pt-5" href="#">
 <span class="text-xs font-bold tracking-widest uppercase">Legacy Files</span>
-</RouterLink>
+</a>
 </div>
 </nav>
 <main class="flex flex-col gap-section-gap py-20 px-4">
@@ -213,9 +213,9 @@
 <p class="text-xs text-outline max-w-xs">A secure, encrypted repository of medical history, curated for a life of intentional wellness and health longevity.</p>
 </div>
 <div class="flex gap-12 text-xs font-bold uppercase tracking-widest text-primary">
-<RouterLink class="hover:underline" :to="{ name: 'home-page' }">Privacy Policy</RouterLink>
-<RouterLink class="hover:underline" :to="{ name: 'archive-export-page' }">Data Export</RouterLink>
-<RouterLink class="hover:underline" :to="{ name: 'family-portal-page' }">Contact Support</RouterLink>
+<a class="hover:underline" href="#">Privacy Policy</a>
+<a class="hover:underline" href="#">Data Export</a>
+<a class="hover:underline" href="#">Contact Support</a>
 </div>
 </div>
 <p class="text-[10px] text-outline text-center mt-20 opacity-40">© 2024 SHAIYRA GUPTA WELLNESS LEDGER. ALL RIGHTS RESERVED. ENCRYPTED AT REST.</p>
@@ -233,7 +233,7 @@
 
 <script>
 export default {
-    name: 'Screen3'
+    name: 'HomePage'
 }
 </script>
 
