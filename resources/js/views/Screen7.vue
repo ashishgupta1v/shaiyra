@@ -4,10 +4,10 @@
 <header class="fixed top-0 left-0 w-full flex justify-between items-center px-8 py-6 max-w-screen-2xl mx-auto bg-stone-50/80 dark:bg-slate-950/80 backdrop-blur-md text-slate-900 dark:text-stone-100 docked full-width z-50 border-b border-stone-200/50 dark:border-slate-800/50 shadow-[0_4px_30px_rgba(26,43,72,0.03)]">
 <div class="text-2xl font-serif font-semibold text-slate-900 dark:text-stone-100 tracking-tighter">Shaiyra Gupta</div>
 <nav class="hidden md:flex gap-8 items-center">
-<a class="font-serif italic text-lg tracking-tight text-slate-500 dark:text-stone-400 hover:text-slate-700 transition-colors" href="#">Timeline</a>
-<a class="font-serif italic text-lg tracking-tight text-slate-900 dark:text-stone-100 border-b-2 border-slate-900 dark:border-stone-100 pb-1 font-medium" href="#">Journal</a>
-<a class="font-serif italic text-lg tracking-tight text-slate-500 dark:text-stone-400 hover:text-slate-700 transition-colors" href="#">Guestbook</a>
-<a class="font-serif italic text-lg tracking-tight text-slate-500 dark:text-stone-400 hover:text-slate-700 transition-colors" href="#">Portfolio</a>
+<RouterLink class="font-serif italic text-lg tracking-tight text-slate-500 dark:text-stone-400 hover:text-slate-700 transition-colors" :to="{ name: 'home-page' }">Timeline</RouterLink>
+<RouterLink class="font-serif italic text-lg tracking-tight text-slate-900 dark:text-stone-100 border-b-2 border-slate-900 dark:border-stone-100 pb-1 font-medium" :to="{ name: 'life-feed-page' }">Journal</RouterLink>
+<RouterLink class="font-serif italic text-lg tracking-tight text-slate-500 dark:text-stone-400 hover:text-slate-700 transition-colors" :to="{ name: 'family-portal-page' }">Guestbook</RouterLink>
+<RouterLink class="font-serif italic text-lg tracking-tight text-slate-500 dark:text-stone-400 hover:text-slate-700 transition-colors" :to="{ name: 'future-forward-page' }">Portfolio</RouterLink>
 </nav>
 <div class="flex items-center gap-4">
 <button class="material-symbols-outlined hover:opacity-80 transition-opacity duration-300 scale-95 duration-200 ease-out" data-icon="settings">settings</button>
@@ -147,10 +147,10 @@
 <div class="flex flex-col md:flex-row justify-between items-center w-full max-w-7xl mx-auto gap-8">
 <div class="font-serif italic text-slate-400">The Curated Life.</div>
 <div class="flex gap-8">
-<a class="font-serif text-sm tracking-wide text-slate-400 dark:text-stone-500 hover:text-slate-900 dark:hover:text-stone-200 hover:opacity-80 transition-opacity transition-colors duration-500" href="#">Contact</a>
-<a class="font-serif text-sm tracking-wide text-slate-400 dark:text-stone-500 hover:text-slate-900 dark:hover:text-stone-200 hover:opacity-80 transition-opacity transition-colors duration-500" href="#">Archives</a>
-<a class="font-serif text-sm tracking-wide text-slate-400 dark:text-stone-500 hover:text-slate-900 dark:hover:text-stone-200 hover:opacity-80 transition-opacity transition-colors duration-500" href="#">Future Self</a>
-<a class="font-serif text-sm tracking-wide text-slate-400 dark:text-stone-500 hover:text-slate-900 dark:hover:text-stone-200 hover:opacity-80 transition-opacity transition-colors duration-500" href="#">Privacy</a>
+<RouterLink class="font-serif text-sm tracking-wide text-slate-400 dark:text-stone-500 hover:text-slate-900 dark:hover:text-stone-200 hover:opacity-80 transition-opacity transition-colors duration-500" :to="{ name: 'family-portal-page' }">Contact</RouterLink>
+<RouterLink class="font-serif text-sm tracking-wide text-slate-400 dark:text-stone-500 hover:text-slate-900 dark:hover:text-stone-200 hover:opacity-80 transition-opacity transition-colors duration-500" :to="{ name: 'milestones-page' }">Archives</RouterLink>
+<RouterLink class="font-serif text-sm tracking-wide text-slate-400 dark:text-stone-500 hover:text-slate-900 dark:hover:text-stone-200 hover:opacity-80 transition-opacity transition-colors duration-500" :to="{ name: 'future-forward-page' }">Future Self</RouterLink>
+<RouterLink class="font-serif text-sm tracking-wide text-slate-400 dark:text-stone-500 hover:text-slate-900 dark:hover:text-stone-200 hover:opacity-80 transition-opacity transition-colors duration-500" :to="{ name: 'home-page' }">Privacy</RouterLink>
 </div>
 <div class="font-serif text-sm tracking-wide">© 1999 — 2024 Shaiyra Gupta. The Curated Life.</div>
 </div>
