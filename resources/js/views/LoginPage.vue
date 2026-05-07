@@ -7,8 +7,8 @@
     <div class="relative w-full max-w-md">
       <!-- Logo area -->
       <div class="text-center mb-10">
-        <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center font-serif text-3xl border-2" style="background-color:#dcc0c020; border-color:#dcc0c050; color:#dcc0c0;">
-          S
+        <div class="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+          <img src="/images/shaiyra-logo.png" alt="Shaiyra Logo" class="w-full h-full object-contain filter drop-shadow-md opacity-90" style="filter: brightness(0) invert(1) drop-shadow(0px 2px 4px rgba(0,0,0,0.5));" />
         </div>
         <h1 class="font-serif text-3xl mb-1" style="color:#fcf9f5;">Shaiyra's Journal</h1>
         <p class="text-sm" style="color:#ffffff40;">Admin access — family administrators only</p>

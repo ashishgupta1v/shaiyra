@@ -198,7 +198,8 @@
     </div>
     
     <!-- Footer -->
-    <footer class="py-12 border-t border-sage/10 text-center">
+    <footer class="py-12 border-t border-sage/10 text-center flex flex-col items-center">
+      <img src="/images/shaiyra-logo.png" alt="Shaiyra Logo" class="w-16 h-16 mb-6 object-contain opacity-80" />
       <div class="font-serif text-lg mb-1 text-navy">Shaiyra Gupta</div>
       <div class="text-xs text-sage/50">Born April 29, 2026 · A heirloom journal</div>
       <div class="text-xs text-sage/40 mt-6">Made with love by Mama &amp; Papa · {{ currentYear }}</div>
