@@ -2,10 +2,96 @@
 @tailwind components;
 @tailwind utilities;
 
-.material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+/* ===== DESIGN SYSTEM ===== */
+:root {
+  --cream: #fcf9f5;
+  --navy: #031632;
+  --sage: #566252;
+  --blush: #dcc0c0;
+  --gold: #c9a84c;
+  --navy-light: #1a2b48;
+  --surface-warm: #f0ede9;
+  --surface-stone: #e5e2de;
 }
+* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body { font-family: 'Manrope', sans-serif; background: var(--cream); color: var(--navy); overflow-x: hidden; }
+.dark body { background: #0d1117; color: #e8e3db; }
 
-body {
-    background-color: #fcf9f5;
-}
+.font-serif { font-family: 'Noto Serif', Georgia, serif; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; line-height: 1; vertical-align: middle; }
+
+/* === GLASS PANEL === */
+.glass { background: rgba(252,249,245,0.85); backdrop-filter: blur(20px) saturate(1.2); -webkit-backdrop-filter: blur(20px); }
+.dark .glass { background: rgba(13,17,23,0.85); }
+.glass-navy { background: rgba(3,22,50,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(86,98,82,0.3); border-radius: 3px; }
+
+/* === PAGE TRANSITIONS === */
+[x-show] { transition: opacity 0.3s ease, transform 0.3s ease; }
+
+/* === TIMELINE LINE === */
+.timeline-rail::before { content:''; position:absolute; left:0; top:0; bottom:0; width:1px; background: linear-gradient(to bottom, transparent, var(--sage) 10%, var(--sage) 90%, transparent); }
+
+/* === SCRAPBOOK ROTATIONS === */
+.rotate-slight-l { transform: rotate(-1.5deg); }
+.rotate-slight-r { transform: rotate(1.5deg); }
+.rotate-tiny-l { transform: rotate(-0.5deg); }
+.rotate-tiny-r { transform: rotate(0.8deg); }
+
+/* === CARD HOVER === */
+.card-lift { transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease; }
+.card-lift:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 20px 60px rgba(3,22,50,0.12); }
+
+/* === ADMIN BADGE === */
+.admin-fab { position: fixed; bottom: 24px; right: 24px; z-index: 100; }
+
+/* === GROWTH CHART (SVG) === */
+.chart-line { fill: none; stroke: var(--sage); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.chart-area { fill: url(#chartGrad); opacity: 0.15; }
+.chart-dot { fill: white; stroke: var(--sage); stroke-width: 2; }
+
+/* === PHOTO GRID === */
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.photo-grid .span-2 { grid-column: span 2; }
+.photo-grid .span-tall { grid-row: span 2; }
+
+/* === LETTER CARD === */
+.letter-card { background: #fefcf8; border: 1px solid #e8e0d0; position: relative; }
+.letter-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--sage), var(--blush)); }
+
+/* === PROGRESS BAR === */
+.progress-fill { transition: width 1s ease-out; }
+
+/* === NOTIFICATION === */
+.notif { animation: slideUp 0.3s ease-out; }
+
+/* === FAMILY TREE === */
+.tree-node { cursor: pointer; transition: all 0.3s ease; }
+.tree-node:hover .tree-card { border-color: var(--sage); box-shadow: 0 8px 30px rgba(86,98,82,0.2); }
+.tree-connector { stroke: var(--surface-stone); stroke-width: 1.5; fill: none; }
+
+/* === DARK MODE OVERRIDES === */
+.dark .letter-card { background: #1a1f2e; border-color: #2a3045; }
+.dark .glass { background: rgba(13,17,23,0.9); }
+
+/* === MOBILE NAV === */
+.mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: rgba(252,249,245,0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(86,98,82,0.15); }
+.dark .mobile-nav { background: rgba(13,17,23,0.95); }
+
+/* === HERO ORNAMENT === */
+.ornament { opacity: 0.15; pointer-events: none; }
+
+/* === MILESTONE BADGE === */
+.milestone-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; }
+
+/* === SCROLL SNAP === */
+.snap-container { scroll-snap-type: y mandatory; }
+.snap-section { scroll-snap-align: start; }
+
+/* === PAGE INDICATOR === */
+.page-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(86,98,82,0.3); transition: all 0.3s ease; }
+.page-dot.active { background: var(--sage); width: 20px; border-radius: 3px; }
