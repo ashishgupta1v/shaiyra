@@ -1,10 +1,12 @@
 <template>
-  <header :class="['fixed top-0 left-0 right-0 z-40 glass border-b border-sage/10 transition-shadow', scrolled ? 'shadow-sm' : '']">
+  <header
+    :class="['fixed top-0 left-0 right-0 z-40 glass border-b border-sage/10 transition-shadow', scrolled ? 'shadow-sm' : '']">
     <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
       <!-- Logo -->
       <RouterLink to="/home" class="flex items-center gap-3 group">
-        <div class="w-8 h-8 rounded-full bg-navy flex items-center justify-center group-hover:bg-navy-light transition-colors">
-          <span class="text-cream text-xs font-serif italic font-bold">S</span>
+        <div
+          class="w-8 h-8 flex items-center justify-center group-hover:bg-navy-light transition-colors">
+          <img src="/images/shaiyra-logo.png" alt="Shaiyra Logo" class="w-full h-full object-contain filter" />
         </div>
         <span class="font-serif text-xl text-navy font-semibold hidden sm:block">Shaiyra Gupta</span>
         <span class="font-serif text-xl text-navy font-semibold sm:hidden">Shaiyra</span>
