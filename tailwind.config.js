@@ -5,9 +5,22 @@ export default {
         "./resources/**/*.js",
         "./resources/**/*.vue",
     ],
+    darkMode: 'class',
     theme: {
         extend: {
             colors: {
+                cream: '#fcf9f5',
+                navy: '#031632',
+                sage: '#566252',
+                blush: '#dcc0c0',
+                'navy-light': '#1a2b48',
+                'sage-light': '#d6e4d0',
+                'sage-dark': '#3e4a3b',
+                'surface-warm': '#f0ede9',
+                'surface-stone': '#e5e2de',
+                gold: '#c9a84c',
+                'gold-light': '#f0e6c8',
+                // Keep some material colors as fallback just in case other components use them
                 "secondary-fixed-dim": "#cbc6bd",
                 "surface-container-highest": "#e5e2e1",
                 "on-surface-variant": "#444748",
@@ -57,24 +70,9 @@ export default {
                 "on-tertiary-fixed-variant": "#514440",
                 "blush-accent": "#f8ecea"
             },
-            borderRadius: {
-                "DEFAULT": "0.125rem",
-                "lg": "0.25rem",
-                "xl": "0.5rem",
-                "full": "0.75rem"
-            },
-            spacing: {
-                "container-padding": "40px",
-                "unit": "8px",
-                "stack-sm": "12px",
-                "gutter": "24px",
-                "stack-md": "24px",
-                "stack-lg": "48px",
-                "margin-page": "64px",
-                "container-max": "1120px",
-                "section-gap": "120px"
-            },
             fontFamily: {
+                serif: ['Noto Serif', 'Georgia', 'serif'],
+                sans: ['Manrope', 'system-ui', 'sans-serif'],
                 "label-sm": ["Work Sans"],
                 "label-caps": ["Manrope"],
                 "headline-md": ["Noto Serif"],
@@ -84,16 +82,18 @@ export default {
                 "headline-lg": ["Noto Serif"],
                 "display-lg": ["Noto Serif"],
             },
-            fontSize: {
-                "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.08em", "fontWeight": "500"}],
-                "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
-                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                "headline-xl": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                "headline-lg": ["32px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "400"}],
-                "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700"}]
-            }
+            animation: {
+                'fade-in': 'fadeIn 0.5s ease-in-out',
+                'slide-up': 'slideUp 0.4s ease-out',
+                'scale-in': 'scaleIn 0.3s ease-out',
+                'shimmer': 'shimmer 1.5s infinite',
+            },
+            keyframes: {
+                fadeIn: { from: { opacity: '0' }, to: { opacity: '1' } },
+                slideUp: { from: { opacity: '0', transform: 'translateY(20px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+                scaleIn: { from: { opacity: '0', transform: 'scale(0.95)' }, to: { opacity: '1', transform: 'scale(1)' } },
+                shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
+            },
         },
     },
     plugins: [
