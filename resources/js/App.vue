@@ -1,11 +1,17 @@
 <template>
-  <div :class="darkMode ? 'dark' : ''" class="scroll-smooth min-h-screen font-sans bg-cream text-navy transition-colors duration-300">
+  <div :class="darkMode ? 'dark' : ''" class="scroll-smooth min-h-screen font-sans bg-cream text-navy transition-colors duration-500">
+    <!-- Custom Cursor -->
+    <template v-if="!isTouchDevice">
+      <div class="custom-cursor hidden md:block" :class="{ 'hovered': isHovering }" :style="{ left: mouseX + 'px', top: mouseY + 'px' }"></div>
+      <div class="custom-cursor-ring hidden md:block" :class="{ 'hovered': isHovering }" :style="{ left: mouseX + 'px', top: mouseY + 'px' }"></div>
+    </template>
+
     <NavBar :darkMode="darkMode" @toggle-dark-mode="darkMode = !darkMode" />
     
     <main class="pt-16 min-h-screen">
-      <!-- Use transition for router view -->
+      <!-- Use cinematic transition for router view -->
       <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
+        <transition name="page-slide" mode="out-in">
           <component :is="Component" />
         </transition>
       </router-view>
@@ -24,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, provide, onMounted } from 'vue';
+import { ref, provide, onMounted, onUnmounted } from 'vue';
 import NavBar from '@/components/NavBar.vue';
 
 const darkMode = ref(false);
@@ -42,26 +48,65 @@ const showNotification = (message, type = 'info') => {
   }, 3000);
 };
 
+// Custom Cursor Logic
+const mouseX = ref(-100);
+const mouseY = ref(-100);
+const isHovering = ref(false);
+const isTouchDevice = ref(false);
+
+const updateCursor = (e) => {
+  if (isTouchDevice.value) return;
+  mouseX.value = e.clientX;
+  mouseY.value = e.clientY;
+};
+
+const checkHover = (e) => {
+  if (isTouchDevice.value) return;
+  // Check if hovering over links, buttons, or inputs
+  const target = e.target.closest('a, button, input, textarea, select, .cursor-pointer, .card-lift');
+  isHovering.value = !!target;
+};
+
 // Provide notification method globally
 provide('showNotification', showNotification);
 provide('darkMode', darkMode);
+
+const handleTouch = () => {
+  isTouchDevice.value = true;
+  window.removeEventListener('touchstart', handleTouch);
+};
 
 onMounted(() => {
   // Read dark mode from local storage or system preference if desired
   const isDark = localStorage.getItem('darkMode') === 'true';
   darkMode.value = isDark;
+
+  // Global mouse events for cursor
+  window.addEventListener('touchstart', handleTouch, { passive: true });
+  window.addEventListener('mousemove', updateCursor);
+  window.addEventListener('mouseover', checkHover);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('touchstart', handleTouch);
+  window.removeEventListener('mousemove', updateCursor);
+  window.removeEventListener('mouseover', checkHover);
 });
 </script>
 
 <style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+/* Cinematic Page Slide Transition */
+.page-slide-enter-active,
+.page-slide-leave-active {
+  transition: opacity 0.5s cubic-bezier(0.65, 0, 0.35, 1), transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
 }
-.fade-enter-from,
-.fade-leave-to {
+.page-slide-enter-from {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(20px) scale(0.98);
+}
+.page-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-20px) scale(1.02);
 }
 
 .toast-enter-active {

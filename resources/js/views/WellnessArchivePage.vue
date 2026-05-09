@@ -1,109 +1,99 @@
 <template>
-  <div class="min-h-screen" style="background-color:#fcf9f5; font-family:'Manrope',sans-serif;">
-    <NavBar />
-    <div class="pt-12 pb-8" style="background-color:#031632;">
-      <div class="max-w-5xl mx-auto px-6">
-        <p class="text-xs uppercase tracking-widest mb-2" style="color:#dcc0c0; opacity:0.5;">Health & wellness</p>
-        <div class="flex items-end justify-between">
-          <h1 class="font-serif text-5xl" style="color:#fcf9f5;">Wellness Archive</h1>
-          <button v-if="store.isAdmin" @click="openAdd()"
-            class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm"
-            style="background-color:#dcc0c0; color:#031632;">
-            <span class="material-symbols-outlined text-base">add</span> Add Record
+  <div class="animate-fade-in bg-surface-warm min-h-screen pb-24">
+    <!-- Header -->
+    <div class="pt-24 pb-16 bg-navy relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-navy to-navy/80"></div>
+      <div class="relative max-w-5xl mx-auto px-6">
+        <p class="text-xs font-black tracking-[0.25em] text-blush uppercase mb-3 block">Health & Wellness</p>
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <h1 class="font-serif text-5xl md:text-6xl font-light text-cream mb-4 md:mb-0">Wellness Archive</h1>
+          <button class="transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 px-6 py-3 bg-blush text-navy text-xs font-black tracking-widest uppercase transition-colors hover:bg-blush/90 w-full md:w-auto card-lift">
+            <span class="material-symbols-outlined text-sm">add</span>
+            Add Record
           </button>
         </div>
       </div>
     </div>
+
     <div class="max-w-5xl mx-auto px-6 py-12">
       <!-- Type Filters -->
-      <div class="flex flex-wrap gap-2 mb-8">
+      <div class="flex flex-wrap gap-2 mb-12">
         <button v-for="t in types" :key="t.key" @click="activeType = t.key"
-          :class="['px-4 py-1.5 rounded-full text-xs uppercase tracking-wider transition-all', activeType===t.key ? '' : 'border hover:opacity-80']"
-          :style="activeType===t.key ? 'background-color:#031632; color:#fcf9f5;' : 'border-color:#03163220; color:#566252;'">
+          :class="['px-5 py-2 text-xs font-bold tracking-widest uppercase transition-all border', activeType===t.key ? 'bg-navy border-navy text-cream' : 'border-sage/20 text-sage hover:border-sage/50 bg-white']">
           {{ t.icon }} {{ t.label }}
         </button>
       </div>
+
       <!-- Records -->
-      <div class="space-y-4">
-        <div v-for="rec in filteredWellness" :key="rec.id"
-          class="group p-6 rounded-2xl border transition-all hover:shadow-md"
-          style="background-color:white; border-color:#03163208;">
+      <div class="space-y-6">
+        <div v-for="(rec, index) in filteredWellness" :key="rec.id" v-reveal="'reveal-up'" v-tilt :style="`transition-delay: ${index * 0.1}s`"
+          class="group p-8 bg-white border border-sage/10 transition-all hover:shadow-xl card-lift">
           <div class="flex items-start justify-between">
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0" :style="typeStyle(rec.type)">
+            <div class="flex items-start gap-6">
+              <div class="w-12 h-12 flex items-center justify-center text-2xl flex-shrink-0 bg-surface-stone text-navy">
                 {{ typeIcon(rec.type) }}
               </div>
               <div>
-                <div class="flex items-center gap-2 mb-1">
-                  <h3 class="font-serif text-lg" style="color:#031632;">{{ rec.title }}</h3>
-                  <span class="text-xs px-2 py-0.5 rounded-full" :style="typeStyle(rec.type)">{{ rec.type }}</span>
+                <div class="flex items-center gap-3 mb-2">
+                  <h3 class="font-serif text-2xl text-navy">{{ rec.title }}</h3>
+                  <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 bg-surface-stone text-sage">{{ rec.type }}</span>
                 </div>
-                <p class="text-xs mb-2" style="color:#566252;">{{ formatDate(rec.date) }} · {{ rec.doctor }}</p>
-                <p class="text-sm" style="color:#566252;">{{ rec.notes }}</p>
-                <div v-if="rec.vaccinations?.length" class="flex flex-wrap gap-1 mt-2">
-                  <span v-for="v in rec.vaccinations" :key="v" class="text-xs px-2 py-0.5 rounded-full" style="background-color:#56625215; color:#566252;">💉 {{ v }}</span>
+                <p class="text-xs font-bold tracking-[0.2em] text-sage uppercase mb-4">{{ formatDate(rec.date) }} <span v-if="rec.doctor" class="mx-2">·</span> {{ rec.doctor }}</p>
+                <p class="text-base text-sage/80 leading-relaxed font-light mb-4">{{ rec.notes }}</p>
+                <div v-if="rec.vaccinations?.length" class="flex flex-wrap gap-2">
+                  <span v-for="v in rec.vaccinations" :key="v" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 border border-sage/20 text-sage">💉 {{ v }}</span>
                 </div>
               </div>
             </div>
-            <div v-if="store.isAdmin" class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button @click="openEdit(rec)" class="p-1.5 rounded-lg hover:bg-blue-50" style="color:#566252;">
+            <div v-if="store.isAdmin" class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button  @click="openEdit(rec)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-sage/10 text-sage transition-colors transition-transform hover:scale-105 active:scale-95">
                 <span class="material-symbols-outlined text-sm">edit</span>
               </button>
-              <button @click="confirmDelete(rec)" class="p-1.5 rounded-lg hover:bg-red-50 text-red-400">
+              <button  @click="confirmDelete(rec)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-50 text-red-400 transition-colors transition-transform hover:scale-105 active:scale-95">
                 <span class="material-symbols-outlined text-sm">delete</span>
               </button>
             </div>
           </div>
         </div>
-        <div v-if="!filteredWellness.length" class="text-center py-16">
-          <span class="text-5xl block mb-3">🏥</span>
-          <p class="text-sm" style="color:#566252;">No wellness records yet.</p>
+        <div v-if="!filteredWellness.length" class="text-center py-32 bg-white border border-sage/10">
+          <span class="text-6xl block mb-6">🏥</span>
+          <p class="font-serif text-3xl text-navy mb-3">No wellness records yet</p>
+          <p class="text-sage/70">Health is wealth. Keep track of Shaiyra's medical history here.</p>
         </div>
       </div>
     </div>
 
+    <!-- Add/Edit Modal -->
     <AppModal :show="showModal" :title="editingItem ? 'Edit Wellness Record' : 'New Wellness Record'" size="lg" @close="closeModal">
-      <div class="space-y-4">
-        <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FloatingInput id="well_date" label="Date" type="date" v-model="form.date" />
           <div>
-            <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Date</label>
-            <input v-model="form.date" type="date" class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
-          </div>
-          <div>
-            <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Type</label>
-            <select v-model="form.type" class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
+            <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Type</label>
+            <select v-model="form.type" class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
               <option v-for="t in types.filter(t=>t.key!=='all')" :key="t.key" :value="t.key">{{ t.label }}</option>
             </select>
           </div>
         </div>
-        <div>
-          <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Title</label>
-          <input v-model="form.title" type="text" class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
-        </div>
-        <div>
-          <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Doctor / Provider</label>
-          <input v-model="form.doctor" type="text" class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
-        </div>
-        <div>
-          <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Notes</label>
-          <textarea v-model="form.notes" rows="4" class="w-full px-4 py-3 rounded-xl border text-sm outline-none resize-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;"></textarea>
-        </div>
-        <div>
-          <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Vaccinations (comma separated)</label>
-          <input v-model="form.vacStr" type="text" placeholder="BCG, HepB, Polio..." class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
-        </div>
+        <FloatingInput id="well_title" label="Title (e.g. 6-Month Checkup)" v-model="form.title" />
+        <FloatingInput id="well_doctor" label="Doctor / Provider" v-model="form.doctor" />
+        <FloatingInput id="well_notes" label="Notes" type="textarea" rows="4" v-model="form.notes" />
+        <FloatingInput id="well_vaccinations" label="Vaccinations (comma separated)" v-model="form.vacStr" />
       </div>
       <template #footer>
-        <button @click="closeModal" class="px-5 py-2.5 rounded-xl text-sm border" style="border-color:#03163220; color:#566252;">Cancel</button>
-        <button @click="saveItem" class="px-5 py-2.5 rounded-xl text-sm" style="background-color:#031632; color:#fcf9f5;">{{ editingItem ? 'Save' : 'Add Record' }}</button>
+        <button @click="closeModal" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
+        <button  @click="saveItem" class="px-8 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy/90 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">
+          {{ editingItem ? 'Save Changes' : 'Add Record' }}
+        </button>
       </template>
     </AppModal>
 
+    <!-- Delete Modal -->
     <AppModal :show="showDeleteModal" title="Delete Record" @close="showDeleteModal=false">
-      <p class="text-sm" style="color:#566252;">Delete <strong style="color:#031632;">{{ deleteTarget?.title }}</strong>?</p>
+      <p class="text-navy/70 leading-relaxed">Delete <strong class="text-navy font-bold">{{ deleteTarget?.title }}</strong>? This cannot be undone.</p>
       <template #footer>
-        <button @click="showDeleteModal=false" class="px-5 py-2.5 rounded-xl text-sm border" style="border-color:#03163220; color:#566252;">Cancel</button>
-        <button @click="doDelete" class="px-5 py-2.5 rounded-xl text-sm bg-red-600 text-white">Delete</button>
+        <button @click="showDeleteModal=false" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
+        <button  @click="doDelete" class="px-8 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">Delete</button>
       </template>
     </AppModal>
   </div>
@@ -114,6 +104,7 @@ import { ref, computed } from 'vue';
 import { useJournalStore } from '@/stores/journal';
 import NavBar from '@/components/NavBar.vue';
 import AppModal from '@/components/AppModal.vue';
+import FloatingInput from '@/components/FloatingInput.vue';
 
 const store = useJournalStore();
 store.init();

@@ -16,26 +16,13 @@
         <h2 class="font-serif text-3xl text-navy mb-8">Leave a Message</h2>
         <div class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Your Name</label>
-              <input v-model="guestForm.name" type="text" placeholder="Nana, Dadi, Chacha..." 
-                class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
-            </div>
-            <div>
-              <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Your Relation</label>
-              <input v-model="guestForm.relation" type="text" placeholder="Grandmother, Uncle..." 
-                class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
-            </div>
+            <FloatingInput id="guest_name" label="Your Name (Nana, Dadi, Chacha...)" v-model="guestForm.name" />
+            <FloatingInput id="guest_relation" label="Your Relation (Grandmother, Uncle...)" v-model="guestForm.relation" />
           </div>
-          <div>
-            <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Your Message to Shaiyra</label>
-            <textarea v-model="guestForm.message" rows="5" placeholder="Share your love, blessings, and wishes for little Shaiyra..." 
-              class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors resize-none leading-relaxed"></textarea>
-          </div>
+          <FloatingInput id="guest_message" label="Your Message to Shaiyra..." v-model="guestForm.message" type="textarea" rows="5" />
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4 border-t border-sage/10">
             <p class="text-xs text-sage/70">Messages are reviewed before publishing.</p>
-            <button @click="submitGuest" :disabled="!guestForm.name || !guestForm.message"
-              class="flex items-center justify-center gap-2 px-8 py-3 bg-sage text-cream text-xs font-black tracking-widest uppercase transition-colors hover:bg-sage/90 disabled:opacity-50">
+            <button class="transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 px-8 py-3 bg-sage text-cream text-xs font-black tracking-widest uppercase transition-colors hover:bg-sage/90 disabled:opacity-50">
               <span class="material-symbols-outlined text-sm">send</span>
               Send with Love
             </button>
@@ -60,8 +47,8 @@
               <p class="text-sm text-sage/80 leading-relaxed font-serif italic">"{{ msg.message }}"</p>
             </div>
             <div class="flex items-center gap-2 mt-4 md:mt-0 flex-shrink-0">
-              <button @click="store.approveGuestbookEntry(msg.id)" class="px-4 py-2 bg-sage/10 text-sage text-xs font-bold tracking-widest uppercase hover:bg-sage/20 transition-colors border border-sage/20">Approve</button>
-              <button @click="store.deleteGuestbookEntry(msg.id)" class="px-4 py-2 bg-red-50 text-red-500 text-xs font-bold tracking-widest uppercase hover:bg-red-100 transition-colors border border-red-200">Reject</button>
+              <button  @click="store.approveGuestbookEntry(msg.id)" class="px-4 py-2 bg-sage/10 text-sage text-xs font-bold tracking-widest uppercase hover:bg-sage/20 transition-colors border border-sage/20 transition-transform hover:scale-105 active:scale-95">Approve</button>
+              <button  @click="store.deleteGuestbookEntry(msg.id)" class="px-4 py-2 bg-red-50 text-red-500 text-xs font-bold tracking-widest uppercase hover:bg-red-100 transition-colors border border-red-200 transition-transform hover:scale-105 active:scale-95">Reject</button>
             </div>
           </div>
         </div>
@@ -86,7 +73,7 @@
             </div>
           </div>
           <div v-if="store.isAdmin" class="flex justify-end mt-6 pt-4 border-t border-sage/5 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button @click="store.deleteGuestbookEntry(msg.id)" class="text-xs px-4 py-2 border border-red-200 text-red-400 hover:bg-red-50 transition-colors uppercase tracking-widest font-bold">Remove</button>
+            <button  @click="store.deleteGuestbookEntry(msg.id)" class="text-xs px-4 py-2 border border-red-200 text-red-400 hover:bg-red-50 transition-colors uppercase tracking-widest font-bold transition-transform hover:scale-105 active:scale-95">Remove</button>
           </div>
         </div>
 
@@ -102,6 +89,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useJournalStore } from '@/stores/journal';
+import FloatingInput from '@/components/FloatingInput.vue';
 
 const store = useJournalStore();
 store.init();

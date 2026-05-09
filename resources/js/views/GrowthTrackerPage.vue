@@ -7,9 +7,8 @@
         <p class="text-xs font-black tracking-[0.25em] text-blush uppercase mb-3 block">Little by little</p>
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <h1 class="font-serif text-5xl md:text-6xl font-light text-cream mb-4 md:mb-0">Growth Tracker</h1>
-          <button v-if="store.isAdmin" @click="openAdd()"
-            class="flex items-center justify-center gap-2 px-6 py-3 bg-blush text-navy text-xs font-black tracking-widest uppercase transition-colors hover:bg-blush/90 w-full md:w-auto card-lift">
-            <span class="material-symbols-outlined text-sm">add</span>
+          <button class="transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 px-6 py-3 bg-blush text-navy text-xs font-black tracking-widest uppercase transition-colors hover:bg-blush/90 w-full md:w-auto card-lift">
+            <Plus class="w-4 h-4" />
             Add Record
           </button>
         </div>
@@ -19,7 +18,7 @@
     <div class="max-w-5xl mx-auto px-6 py-12">
       <!-- Latest Stats -->
       <div v-if="latestRecord" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-        <div v-for="metric in latestMetrics" :key="metric.label"
+        <div v-for="(metric, index) in latestMetrics" :key="metric.label" v-reveal="'reveal-up'" v-tilt :style="`transition-delay: ${index * 0.1}s`"
           class="p-8 bg-white border border-sage/10 text-center card-lift">
           <div class="text-xs font-bold tracking-widest uppercase text-sage mb-4">{{ metric.label }}</div>
           <div class="font-serif text-5xl text-navy mb-2">{{ metric.value }}</div>
@@ -31,26 +30,24 @@
         </div>
       </div>
 
-      <!-- SVG Weight Chart -->
-      <div v-if="store.sortedGrowth.length > 1" class="p-8 bg-white border border-sage/10 mb-16 card-lift">
-        <div class="flex items-center justify-between mb-8">
-          <h2 class="font-serif text-2xl text-navy">Weight Progress</h2>
-          <div class="flex items-center gap-4 text-xs font-bold tracking-widest uppercase text-sage">
-            <span class="flex items-center gap-2"><span class="w-4 h-1 inline-block rounded bg-navy"></span> Weight (kg)</span>
+      <!-- Interactive Growth Chart -->
+      <div v-if="store.sortedGrowth.length > 1" class="p-8 bg-white border border-sage/10 mb-16 card-lift relative">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <h2 class="font-serif text-2xl text-navy">Growth Progress</h2>
+          <!-- Metric Toggles -->
+          <div class="flex items-center gap-2 bg-surface-stone p-1 rounded-sm">
+            <button v-for="metric in ['weight', 'height', 'headCirc']" :key="metric"
+              @click="activeMetric = metric"
+              class="px-4 py-2 text-[10px] font-black tracking-widest uppercase transition-all rounded-sm"
+              :class="activeMetric === metric ? 'bg-white text-navy shadow-sm' : 'text-sage/60 hover:text-navy'">
+              {{ metric === 'headCirc' ? 'Head' : metric }}
+            </button>
           </div>
         </div>
-        <svg :viewBox="`0 0 ${chartW} ${chartH}`" class="w-full h-64">
-          <!-- Grid lines -->
-          <line v-for="(y, i) in yGridLines" :key="i" :x1="padL" :y1="y" :x2="chartW-padR" :y2="y" stroke="currentColor" class="text-sage/10" stroke-width="1"/>
-          <!-- X labels -->
-          <text v-for="(pt, i) in chartPoints" :key="`xl${i}`" :x="pt.x" :y="chartH-4" fill="currentColor" class="text-sage/70 font-sans" font-size="9" text-anchor="middle" font-weight="bold" letter-spacing="1">{{ store.sortedGrowth[i]?.ageLabel.toUpperCase() }}</text>
-          <!-- Area fill -->
-          <path :d="areaPath" fill="currentColor" class="text-blush/20"/>
-          <!-- Line -->
-          <path :d="linePath" fill="none" stroke="currentColor" class="text-navy" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- Dots -->
-          <circle v-for="pt in chartPoints" :key="`d${pt.x}`" :cx="pt.x" :cy="pt.y" r="5" fill="currentColor" class="text-navy" stroke="white" stroke-width="2"/>
-        </svg>
+
+        <div class="relative w-full h-64">
+          <Line v-if="chartData" :data="chartData" :options="chartOptions" />
+        </div>
       </div>
 
       <!-- Records Table -->
@@ -83,11 +80,11 @@
                 <td class="px-8 py-5 text-sm text-sage italic">{{ rec.notes }}</td>
                 <td v-if="store.isAdmin" class="px-8 py-5 text-right">
                   <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button @click="openEdit(rec)" class="p-2 rounded-full hover:bg-sage/10 text-sage transition-colors">
-                      <span class="material-symbols-outlined text-[20px]">edit</span>
+                    <button  @click="openEdit(rec)" class="p-2 rounded-full hover:bg-sage/10 text-sage transition-colors transition-transform hover:scale-105 active:scale-95">
+                      <Edit2 class="w-4 h-4" />
                     </button>
-                    <button @click="confirmDelete(rec)" class="p-2 rounded-full hover:bg-red-50 text-red-500 transition-colors">
-                      <span class="material-symbols-outlined text-[20px]">delete</span>
+                    <button  @click="confirmDelete(rec)" class="p-2 rounded-full hover:bg-red-50 text-red-500 transition-colors transition-transform hover:scale-105 active:scale-95">
+                      <Trash2 class="w-4 h-4" />
                     </button>
                   </div>
                 </td>
@@ -96,7 +93,7 @@
           </table>
         </div>
         <div v-if="!store.sortedGrowth.length" class="text-center py-24 bg-white">
-          <span class="material-symbols-outlined text-6xl text-sage/30 block mb-6" style="font-variation-settings:'FILL' 1">straighten</span>
+          <Ruler class="w-16 h-16 text-sage/30 mx-auto mb-6" />
           <p class="text-sage/70">No growth records yet. Add the first measurement!</p>
         </div>
       </div>
@@ -106,48 +103,20 @@
     <AppModal :show="showModal" :title="editingItem ? 'Edit Record' : 'New Growth Record'" @close="closeModal">
       <div class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Date</label>
-            <input v-model="form.date" type="date" 
-              class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-          </div>
-          <div>
-            <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Age Label</label>
-            <input v-model="form.ageLabel" type="text" placeholder="e.g. 2 months" 
-              class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-          </div>
+          <FloatingInput id="growth_date" label="Date" type="date" v-model="form.date" />
+          <FloatingInput id="growth_age" label="Age Label (e.g. 2 months)" v-model="form.ageLabel" />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Weight (kg)</label>
-            <input v-model.number="form.weight" type="number" step="0.01" placeholder="3.3" 
-              class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-          </div>
-          <div>
-            <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Height (cm)</label>
-            <input v-model.number="form.height" type="number" step="0.1" placeholder="51" 
-              class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-          </div>
-          <div>
-            <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Head Circ. (cm)</label>
-            <input v-model.number="form.headCirc" type="number" step="0.1" placeholder="34" 
-              class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-          </div>
+          <FloatingInput id="growth_weight" label="Weight (kg)" type="number" v-model.number="form.weight" />
+          <FloatingInput id="growth_height" label="Height (cm)" type="number" v-model.number="form.height" />
+          <FloatingInput id="growth_head" label="Head Circ. (cm)" type="number" v-model.number="form.headCirc" />
         </div>
-        <div>
-          <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Recorded By</label>
-          <input v-model="form.recordedBy" type="text" placeholder="Pediatrician / Home" 
-            class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-        </div>
-        <div>
-          <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Notes</label>
-          <textarea v-model="form.notes" rows="3" 
-            class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors resize-none"></textarea>
-        </div>
+        <FloatingInput id="growth_recorded_by" label="Recorded By" v-model="form.recordedBy" />
+        <FloatingInput id="growth_notes" label="Notes" type="textarea" rows="3" v-model="form.notes" />
       </div>
       <template #footer>
         <button @click="closeModal" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
-        <button @click="saveItem" class="px-8 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy/90 transition-colors w-full md:w-auto">
+        <button  @click="saveItem" class="px-8 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy/90 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">
           {{ editingItem ? 'Save Record' : 'Add Record' }}
         </button>
       </template>
@@ -158,7 +127,7 @@
       <p class="text-navy/70 leading-relaxed">Are you sure you want to delete the record for <strong class="text-navy font-bold">{{ deleteTarget?.ageLabel }}</strong>?</p>
       <template #footer>
         <button @click="showDeleteModal=false" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
-        <button @click="doDelete" class="px-8 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors w-full md:w-auto">Delete</button>
+        <button  @click="doDelete" class="px-8 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">Delete</button>
       </template>
     </AppModal>
   </div>
@@ -168,6 +137,12 @@
 import { ref, computed } from 'vue';
 import { useJournalStore } from '@/stores/journal';
 import AppModal from '@/components/AppModal.vue';
+import FloatingInput from '@/components/FloatingInput.vue';
+import { Plus, Edit2, Trash2, Ruler } from 'lucide-vue-next';
+import { Line } from 'vue-chartjs';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler);
 
 const store = useJournalStore();
 store.init();
@@ -177,8 +152,8 @@ const editingItem = ref(null);
 const showDeleteModal = ref(false);
 const deleteTarget = ref(null);
 
-// Chart config
-const chartW = 800, chartH = 180, padL = 30, padR = 20, padT = 15, padB = 30;
+const activeMetric = ref('weight');
+const metricUnits = { weight: 'kg', height: 'cm', headCirc: 'cm' };
 
 const latestRecord = computed(() => store.sortedGrowth[store.sortedGrowth.length - 1] || null);
 const prevRecord = computed(() => store.sortedGrowth[store.sortedGrowth.length - 2] || null);
@@ -193,41 +168,70 @@ const latestMetrics = computed(() => {
   ];
 });
 
-const chartPoints = computed(() => {
-  const data = store.sortedGrowth.filter(r => r.weight);
-  if (data.length < 2) return [];
-  const weights = data.map(r => r.weight);
-  const minW = Math.min(...weights) * 0.95;
-  const maxW = Math.max(...weights) * 1.05;
-  const innerW = chartW - padL - padR;
-  const innerH = chartH - padT - padB;
-  return data.map((r, i) => ({
-    x: padL + (i / (data.length - 1)) * innerW,
-    y: chartH - padB - ((r.weight - minW) / (maxW - minW)) * innerH,
-  }));
+const chartData = computed(() => {
+  const data = store.sortedGrowth.filter(r => r[activeMetric.value]);
+  if (data.length < 2) return null;
+  
+  return {
+    labels: data.map(r => r.ageLabel.toUpperCase()),
+    datasets: [{
+      label: activeMetric.value === 'headCirc' ? 'Head Circumference' : activeMetric.value.charAt(0).toUpperCase() + activeMetric.value.slice(1),
+      data: data.map(r => parseFloat(r[activeMetric.value])),
+      borderColor: '#1C2C42', // navy
+      backgroundColor: (context) => {
+        const chart = context.chart;
+        const {ctx, chartArea} = chart;
+        if (!chartArea) return null;
+        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+        gradient.addColorStop(0, 'rgba(235, 204, 196, 0.05)'); // blush fade out
+        gradient.addColorStop(1, 'rgba(235, 204, 196, 0.8)'); // blush fade in
+        return gradient;
+      },
+      borderWidth: 2.5,
+      pointBackgroundColor: '#1C2C42',
+      pointBorderColor: '#fff',
+      pointBorderWidth: 2,
+      pointRadius: 4,
+      pointHoverRadius: 6,
+      fill: true,
+      tension: 0.4 // Smooth curves
+    }]
+  };
 });
 
-const linePath = computed(() => {
-  const pts = chartPoints.value;
-  if (pts.length < 2) return '';
-  return pts.map((pt, i) => (i === 0 ? `M${pt.x},${pt.y}` : `L${pt.x},${pt.y}`)).join(' ');
-});
-
-const areaPath = computed(() => {
-  const pts = chartPoints.value;
-  if (pts.length < 2) return '';
-  const bottom = chartH - padB;
-  const start = `M${pts[0].x},${bottom}`;
-  const line = pts.map(pt => `L${pt.x},${pt.y}`).join(' ');
-  return `${start} ${line} L${pts[pts.length-1].x},${bottom} Z`;
-});
-
-const yGridLines = computed(() => {
-  const lines = [];
-  const innerH = chartH - padT - padB;
-  for (let i = 0; i <= 4; i++) lines.push(padT + (i / 4) * innerH);
-  return lines;
-});
+const chartOptions = computed(() => ({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: '#1C2C42',
+      titleFont: { family: 'sans-serif', size: 10, weight: 'bold' },
+      bodyFont: { family: 'sans-serif', size: 12, weight: 'bold' },
+      displayColors: false,
+      callbacks: {
+        label: (context) => `${context.parsed.y} ${metricUnits[activeMetric.value]}`
+      }
+    }
+  },
+  scales: {
+    y: {
+      grid: { color: 'rgba(110, 133, 116, 0.1)', drawBorder: false }, // sage/10
+      ticks: { display: false },
+      beginAtZero: false,
+      suggestedMin: chartData.value ? Math.min(...chartData.value.datasets[0].data) * 0.95 : 0,
+      suggestedMax: chartData.value ? Math.max(...chartData.value.datasets[0].data) * 1.05 : 0
+    },
+    x: {
+      grid: { display: false },
+      ticks: { color: 'rgba(110, 133, 116, 0.7)', font: { family: 'sans-serif', size: 9, weight: 'bold' } }
+    }
+  },
+  interaction: {
+    mode: 'index',
+    intersect: false,
+  }
+}));
 
 const defaultForm = () => ({
   date: new Date().toISOString().split('T')[0], ageLabel:'',
@@ -255,5 +259,4 @@ function formatDate(d) {
 }
 </script>
 <style scoped>
-.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
 </style>

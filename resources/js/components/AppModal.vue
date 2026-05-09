@@ -13,7 +13,7 @@
               <p v-if="subtitle" class="text-[#566252] text-xs mt-0.5">{{ subtitle }}</p>
             </div>
             <button @click="$emit('close')" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#031632]/10 text-[#566252] hover:text-[#031632] transition-colors">
-              <span class="material-symbols-outlined text-base">close</span>
+              <X class="w-5 h-5" />
             </button>
           </div>
           <!-- Body -->
@@ -32,6 +32,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { X } from 'lucide-vue-next';
 
 const props = defineProps({
   show: Boolean,
@@ -54,6 +55,4 @@ const sizeClass = computed(() => ({
 .modal-enter-active, .modal-leave-active { transition: all 0.25s ease; }
 .modal-enter-from, .modal-leave-to { opacity: 0; }
 .modal-enter-from .relative, .modal-leave-to .relative { transform: scale(0.96) translateY(8px); }
-
-.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
 </style>
