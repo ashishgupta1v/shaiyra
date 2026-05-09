@@ -1,66 +1,55 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4" style="background-color:#031632; font-family:'Manrope',sans-serif;">
+  <div class="min-h-screen flex items-center justify-center p-4 bg-navy text-cream animate-fade-in relative overflow-hidden">
     <!-- Background decoration -->
-    <div class="absolute top-0 right-0 w-96 h-96 rounded-full opacity-5" style="background:radial-gradient(circle,#dcc0c0,transparent);"></div>
-    <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-5" style="background:radial-gradient(circle,#566252,transparent);"></div>
+    <div class="absolute top-0 right-0 w-[40rem] h-[40rem] rounded-full bg-blush/5 blur-3xl -z-10"></div>
+    <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] rounded-full bg-sage/5 blur-3xl -z-10"></div>
 
     <div class="relative w-full max-w-md">
       <!-- Logo area -->
-      <div class="text-center mb-10">
-        <div class="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
-          <img src="/images/shaiyra-logo.png" alt="Shaiyra Logo" class="w-full h-full object-contain filter drop-shadow-md opacity-90" style="filter: brightness(0) invert(1) drop-shadow(0px 2px 4px rgba(0,0,0,0.5));" />
+      <div class="text-center mb-12" v-reveal="'reveal-up'">
+        <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+          <img src="/logo.png" alt="Shaiyra Logo" class="w-full h-full object-contain filter invert opacity-90 drop-shadow-lg" />
         </div>
-        <h1 class="font-serif text-3xl mb-1" style="color:#fcf9f5;">Shaiyra's Journal</h1>
-        <p class="text-sm" style="color:#ffffff40;">Admin access — family administrators only</p>
+        <h1 class="font-serif text-4xl mb-2 text-cream">Shaiyra's Journal</h1>
+        <p class="text-xs font-bold tracking-widest uppercase text-cream/40">Admin Access</p>
       </div>
 
       <!-- Login Card -->
-      <div class="p-8 rounded-2xl" style="background-color:#ffffff08; border:1px solid #ffffff10;">
-        <h2 class="font-serif text-xl mb-6" style="color:#fcf9f5;">Sign In</h2>
-        <form @submit.prevent="handleLogin" class="space-y-4">
-          <div>
-            <label class="block text-xs uppercase tracking-wider mb-2" style="color:#ffffff60;">Email</label>
-            <input v-model="email" type="email" placeholder="ashishgupta1v@gmail.com"
-              class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-colors"
-              style="background-color:#ffffff10; border:1px solid #ffffff15; color:#fcf9f5; placeholder-color:#ffffff30;">
-          </div>
-          <div>
-            <label class="block text-xs uppercase tracking-wider mb-2" style="color:#ffffff60;">Password</label>
-            <div class="relative">
-              <input v-model="password" :type="showPass ? 'text' : 'password'" placeholder="••••••••••"
-                class="w-full px-4 py-3 rounded-xl text-sm outline-none pr-12"
-                style="background-color:#ffffff10; border:1px solid #ffffff15; color:#fcf9f5;">
-              <button type="button" @click="showPass=!showPass" class="absolute right-3 top-1/2 -translate-y-1/2 p-1" style="color:#ffffff40;">
-                <span class="material-symbols-outlined text-base">{{ showPass ? 'visibility_off' : 'visibility' }}</span>
-              </button>
-            </div>
+      <div v-reveal="'reveal-up'" v-tilt :style="`transition-delay: 0.1s`" class="p-8 border border-white/10 bg-white/5 card-lift backdrop-blur-sm">
+        <h2 class="font-serif text-2xl text-cream mb-8">Sign In</h2>
+        <form @submit.prevent="handleLogin" class="space-y-6">
+          <FloatingInput id="email" type="email" label="Email Address" v-model="email" />
+          
+          <div class="relative">
+            <FloatingInput id="password" :type="showPass ? 'text' : 'password'" label="Password" v-model="password" />
+            <button type="button" @click="showPass=!showPass" class="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-cream/40 hover:text-cream/80 transition-colors">
+              <span class="material-symbols-outlined text-base">{{ showPass ? 'visibility_off' : 'visibility' }}</span>
+            </button>
           </div>
 
           <!-- Error -->
-          <div v-if="error" class="px-4 py-3 rounded-xl text-sm flex items-center gap-2" style="background-color:#ff000015; border:1px solid #ff000030; color:#ff6b6b;">
+          <div v-if="error" class="p-4 border border-red-500/20 bg-red-500/10 text-red-400 text-xs font-bold tracking-widest uppercase flex items-center gap-3">
             <span class="material-symbols-outlined text-base">error</span>
             {{ error }}
           </div>
 
-          <button type="submit" :disabled="loading"
-            class="w-full py-3.5 rounded-xl text-sm font-medium transition-all hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
-            style="background-color:#dcc0c0; color:#031632;">
-            <span v-if="loading" class="w-4 h-4 border-2 border-[#031632]/30 border-t-[#031632] rounded-full animate-spin"></span>
+          <button class="transition-transform hover:scale-105 active:scale-95 w-full py-4 bg-gold text-navy text-xs font-black tracking-widest uppercase transition-colors hover:bg-gold/90 disabled:opacity-50 flex items-center justify-center gap-3">
+            <span v-if="loading" class="w-4 h-4 border-2 border-navy/30 border-t-navy rounded-full animate-spin"></span>
             {{ loading ? 'Signing in...' : 'Sign In' }}
           </button>
         </form>
       </div>
 
       <!-- Back link -->
-      <div class="text-center mt-6">
-        <RouterLink to="/home" class="text-sm transition-opacity hover:opacity-100" style="color:#ffffff40;">
+      <div v-reveal="'reveal-up'" :style="`transition-delay: 0.2s`" class="text-center mt-8">
+        <RouterLink to="/home" class="text-[10px] font-black tracking-widest uppercase text-cream/40 hover:text-cream transition-colors">
           ← Return to Shaiyra's Journal
         </RouterLink>
       </div>
 
       <!-- Hint (dev mode) -->
-      <div class="mt-8 p-4 rounded-xl text-center" style="background-color:#ffffff05; border:1px solid #ffffff08;">
-        <p class="text-xs" style="color:#ffffff30;">Admin credentials are set at project configuration.</p>
+      <div v-reveal="'reveal-up'" :style="`transition-delay: 0.3s`" class="mt-12 p-4 border border-white/5 bg-white/5 text-center">
+        <p class="text-[10px] font-bold tracking-widest uppercase text-cream/30">Admin credentials are set at project configuration.</p>
       </div>
     </div>
   </div>
@@ -70,6 +59,7 @@
 import { ref } from 'vue';
 import { useRouter, RouterLink } from 'vue-router';
 import { useJournalStore } from '@/stores/journal';
+import FloatingInput from '@/components/FloatingInput.vue';
 
 const store = useJournalStore();
 const router = useRouter();
@@ -96,5 +86,4 @@ async function handleLogin() {
 </script>
 <style scoped>
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
-input::placeholder { color: rgba(252,249,245,0.3); }
 </style>

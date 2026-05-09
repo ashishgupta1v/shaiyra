@@ -7,9 +7,8 @@
         <p class="text-xs font-black tracking-[0.25em] text-cream/50 uppercase mb-3 block">Shaiyra's Story</p>
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <h1 class="font-serif text-5xl md:text-6xl font-light text-cream">Life Feed</h1>
-          <button v-if="store.isAdmin" @click="openAdd()"
-            class="flex items-center gap-2 px-6 py-3 rounded-none text-xs font-black tracking-widest uppercase transition-all bg-cream text-navy hover:bg-cream/90">
-            <span class="material-symbols-outlined text-base">add</span>
+          <button class="transition-transform hover:scale-105 active:scale-95 flex items-center gap-2 px-6 py-3 rounded-none text-xs font-black tracking-widest uppercase transition-all bg-cream text-navy hover:bg-cream/90 card-lift">
+            <Plus class="w-5 h-5" />
             New Entry
           </button>
         </div>
@@ -31,8 +30,8 @@
     <!-- Entries -->
     <div class="max-w-4xl mx-auto px-6 py-16">
       <TransitionGroup name="fade" tag="div" class="space-y-12">
-        <article v-for="entry in filteredEntries" :key="entry.id"
-          class="group relative p-8 md:p-10 bg-white border border-sage/10 transition-all hover:shadow-xl card-lift">
+        <article v-for="(entry, index) in filteredEntries" :key="entry.id" v-reveal="'reveal-up'" v-tilt :style="`transition-delay: ${index * 0.1}s`"
+          class="group relative p-8 md:p-10 border border-sage/15 glass-glow transition-all hover:shadow-xl card-lift">
 
           <!-- Pinned ribbon -->
           <div v-if="entry.pinned" class="absolute top-0 right-8 px-4 py-1.5 text-[10px] font-black tracking-widest uppercase bg-blush text-navy">
@@ -49,11 +48,11 @@
               <span class="text-3xl">{{ entry.mood }}</span>
               <!-- Admin actions -->
               <div v-if="store.isAdmin" class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button @click="openEdit(entry)" class="w-8 h-8 flex items-center justify-center hover:bg-sage/10 text-sage transition-colors rounded-full">
-                  <span class="material-symbols-outlined text-sm">edit</span>
+                <button  @click="openEdit(entry)" class="w-8 h-8 flex items-center justify-center hover:bg-sage/10 text-sage transition-colors rounded-full transition-transform hover:scale-105 active:scale-95">
+                  <Edit2 class="w-4 h-4" />
                 </button>
-                <button @click="confirmDelete('journal', entry.id, entry.title)" class="w-8 h-8 flex items-center justify-center hover:bg-red-50 text-red-400 transition-colors rounded-full">
-                  <span class="material-symbols-outlined text-sm">delete</span>
+                <button  @click="confirmDelete('journal', entry.id, entry.title)" class="w-8 h-8 flex items-center justify-center hover:bg-red-50 text-red-400 transition-colors rounded-full transition-transform hover:scale-105 active:scale-95">
+                  <Trash2 class="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -77,27 +76,20 @@
       </TransitionGroup>
 
       <!-- Empty -->
-      <div v-if="!filteredEntries.length" class="text-center py-32 bg-white border border-sage/10">
-        <span class="material-symbols-outlined text-6xl text-sage/30 block mb-6" style="font-variation-settings:'FILL' 1">menu_book</span>
+      <div v-if="!filteredEntries.length" class="text-center py-32 bg-white border border-sage/10 glass-glow card-lift">
+        <BookOpen class="w-16 h-16 text-sage/30 mx-auto mb-6" />
         <p class="font-serif text-3xl text-navy mb-3">The journal awaits</p>
         <p class="text-sage/70 mb-8">{{ activeFilter !== 'All' ? 'No entries match this filter.' : 'Start writing Shaiyra\'s story.' }}</p>
-        <button v-if="store.isAdmin" @click="openAdd()" class="bg-navy text-cream px-8 py-3 text-xs font-black tracking-widest uppercase hover:bg-navy-light transition-colors">Write First Entry</button>
+        <button  v-if="store.isAdmin" @click="openAdd()" class="bg-navy text-cream px-8 py-3 text-xs font-black tracking-widest uppercase hover:bg-navy-light transition-colors transition-transform hover:scale-105 active:scale-95">Write First Entry</button>
       </div>
     </div>
 
     <!-- Add/Edit Modal -->
     <AppModal :show="showModal" :title="editingEntry ? 'Edit Entry' : 'New Journal Entry'" size="lg" @close="closeModal">
       <div class="space-y-6">
-        <div>
-          <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Title</label>
-          <input v-model="form.title" type="text" placeholder="Give this entry a name..."
-            class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
-        </div>
+        <FloatingInput id="entry_title" label="Title (Give this entry a name...)" v-model="form.title" />
         <div class="grid grid-cols-2 gap-6">
-          <div>
-            <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Date</label>
-            <input v-model="form.date" type="date" class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
-          </div>
+          <FloatingInput id="entry_date" label="Date" type="date" v-model="form.date" />
           <div>
             <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Mood</label>
             <div class="flex flex-wrap gap-2">
@@ -108,16 +100,8 @@
             </div>
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Story</label>
-          <textarea v-model="form.content" rows="10" placeholder="Write freely..."
-            class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors resize-none leading-relaxed"></textarea>
-        </div>
-        <div>
-          <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Tags (comma separated)</label>
-          <input v-model="form.tagsStr" type="text" placeholder="birth, milestone, family..."
-            class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
-        </div>
+        <FloatingInput id="entry_content" label="Story (Write freely...)" v-model="form.content" type="textarea" rows="10" />
+        <FloatingInput id="entry_tags" label="Tags (comma separated)" v-model="form.tagsStr" />
         <div class="flex items-center gap-3 pt-2 border-t border-sage/10">
           <input v-model="form.pinned" type="checkbox" id="pinned" class="w-4 h-4 accent-navy">
           <label for="pinned" class="text-sm font-bold tracking-wide text-sage">Pin this entry to the top</label>
@@ -125,7 +109,7 @@
       </div>
       <template #footer>
         <button @click="closeModal" class="px-6 py-3 border border-sage/20 text-sage text-xs font-black tracking-widest uppercase hover:bg-surface-stone transition-colors">Cancel</button>
-        <button @click="saveEntry" class="px-6 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy-light transition-colors">{{ editingEntry ? 'Save Changes' : 'Publish Entry' }}</button>
+        <button  @click="saveEntry" class="px-6 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy-light transition-colors transition-transform hover:scale-105 active:scale-95">{{ editingEntry ? 'Save Changes' : 'Publish Entry' }}</button>
       </template>
     </AppModal>
 
@@ -134,7 +118,7 @@
       <p class="text-sage leading-relaxed">Are you sure you want to delete <strong class="text-navy font-bold">{{ deleteTarget?.name }}</strong>? This cannot be undone.</p>
       <template #footer>
         <button @click="showDeleteModal=false" class="px-6 py-3 border border-sage/20 text-sage text-xs font-black tracking-widest uppercase hover:bg-surface-stone transition-colors">Cancel</button>
-        <button @click="doDelete" class="px-6 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors">Delete</button>
+        <button  @click="doDelete" class="px-6 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors transition-transform hover:scale-105 active:scale-95">Delete</button>
       </template>
     </AppModal>
   </div>
@@ -144,6 +128,8 @@
 import { ref, computed } from 'vue';
 import { useJournalStore } from '@/stores/journal';
 import AppModal from '@/components/AppModal.vue';
+import FloatingInput from '@/components/FloatingInput.vue';
+import { Plus, Edit2, Trash2, BookOpen } from 'lucide-vue-next';
 
 const store = useJournalStore();
 store.init();
@@ -213,7 +199,6 @@ function formatDate(d) {
 </script>
 
 <style scoped>
-.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
 .fade-enter-active, .fade-leave-active { transition: all 0.4s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; transform: translateY(20px); }
 </style>

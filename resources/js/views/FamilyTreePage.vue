@@ -1,17 +1,16 @@
 <template>
-  <div class="min-h-screen" style="background-color:#fcf9f5; font-family:'Manrope',sans-serif;">
+  <div class="animate-fade-in bg-surface-warm min-h-screen pb-24">
     <NavBar />
 
     <!-- Header -->
-    <div class="pt-12 pb-8" style="background-color:#031632;">
-      <div class="max-w-6xl mx-auto px-6">
-        <p class="text-xs uppercase tracking-widest mb-2" style="color:#dcc0c0; opacity:0.5;">The roots and branches</p>
-        <div class="flex items-end justify-between">
-          <h1 class="font-serif text-5xl" style="color:#fcf9f5;">Family Tree</h1>
-          <button v-if="store.isAdmin" @click="openAdd()"
-            class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm"
-            style="background-color:#dcc0c0; color:#031632;">
-            <span class="material-symbols-outlined text-base">person_add</span>
+    <div class="pt-24 pb-16 bg-navy relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-navy to-navy/80"></div>
+      <div class="relative max-w-6xl mx-auto px-6">
+        <p class="text-xs font-black tracking-[0.25em] text-gold uppercase mb-3 block">The roots and branches</p>
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <h1 class="font-serif text-5xl md:text-6xl font-light text-cream mb-4 md:mb-0">Family Tree</h1>
+          <button class="transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 px-6 py-3 bg-gold text-navy text-xs font-black tracking-widest uppercase transition-colors hover:bg-gold/90 w-full md:w-auto card-lift">
+            <span class="material-symbols-outlined text-sm">person_add</span>
             Add Member
           </button>
         </div>
@@ -20,87 +19,86 @@
 
     <div class="max-w-6xl mx-auto px-6 py-12">
       <!-- Visual Tree SVG (generations) -->
-      <div class="rounded-2xl p-8 mb-10 overflow-x-auto" style="background-color:#031632;">
-        <h2 class="font-serif text-xl mb-6" style="color:#fcf9f5;">Shaiyra's Family</h2>
+      <div class="rounded-none bg-white border border-sage/10 p-8 mb-16 overflow-x-auto card-lift" v-tilt>
+        <h2 class="font-serif text-2xl text-navy mb-10 text-center">Shaiyra's Family</h2>
         <div class="flex flex-col items-center gap-0" style="min-width:600px;">
           <!-- Generation 0: Grandparents -->
           <div class="flex items-end justify-center gap-16 mb-0 relative">
-            <div v-for="gp in grandparents" :key="gp.id" class="flex flex-col items-center gap-2">
-              <div class="w-14 h-14 rounded-full flex items-center justify-center text-xl font-serif border-2" style="background-color:#ffffff15; border-color:#dcc0c030; color:#dcc0c0;">
+            <div v-for="gp in grandparents" :key="gp.id" class="flex flex-col items-center gap-3">
+              <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-serif border border-sage/20 bg-surface-stone text-navy shadow-sm">
                 {{ gp.name[0] }}
               </div>
               <div class="text-center">
-                <p class="text-xs font-medium" style="color:#fcf9f5;">{{ gp.name.split(' ')[0] }}</p>
-                <p class="text-xs" style="color:#ffffff40;">{{ gp.relation }}</p>
+                <p class="text-sm font-bold text-navy">{{ gp.name.split(' ')[0] }}</p>
+                <p class="text-[10px] font-bold tracking-widest uppercase text-sage">{{ gp.relation }}</p>
               </div>
             </div>
           </div>
 
           <!-- Connector lines -->
-          <div v-if="grandparents.length" class="flex justify-center">
-            <div class="w-px h-8" style="background-color:#dcc0c030;"></div>
+          <div v-if="grandparents.length" class="flex justify-center mt-4">
+            <div class="w-px h-8 bg-sage/20"></div>
           </div>
 
           <!-- Generation 1: Parents -->
-          <div class="flex items-start justify-center gap-24 relative">
-            <div v-for="parent in parents" :key="parent.id" class="flex flex-col items-center gap-2">
-              <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-serif border-2" style="background-color:#dcc0c020; border-color:#dcc0c060; color:#dcc0c0;">
+          <div class="flex items-start justify-center gap-24 relative mt-4">
+            <div v-for="parent in parents" :key="parent.id" class="flex flex-col items-center gap-3">
+              <div class="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-serif border-2 border-blush bg-blush/10 text-navy shadow-md">
                 {{ parent.name[0] }}
               </div>
               <div class="text-center">
-                <p class="text-sm font-medium" style="color:#fcf9f5;">{{ parent.name.split(' ')[0] }}</p>
-                <p class="text-xs" style="color:#dcc0c080;">{{ parent.relation }}</p>
+                <p class="text-base font-bold text-navy">{{ parent.name.split(' ')[0] }}</p>
+                <p class="text-[10px] font-bold tracking-widest uppercase text-blush">{{ parent.relation }}</p>
               </div>
             </div>
           </div>
 
           <!-- Connector -->
-          <div class="flex justify-center">
-            <div class="w-px h-8" style="background-color:#dcc0c050;"></div>
+          <div class="flex justify-center mt-4">
+            <div class="w-px h-10 bg-sage/20"></div>
           </div>
 
           <!-- Generation 2: Shaiyra -->
-          <div class="flex flex-col items-center gap-2">
-            <div class="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-serif border-2" style="background-color:#dcc0c030; border-color:#dcc0c0; color:#fcf9f5;">
+          <div class="flex flex-col items-center gap-4 mt-4">
+            <div class="w-28 h-28 rounded-full flex items-center justify-center text-5xl font-serif bg-navy text-cream shadow-xl ring-4 ring-navy/10">
               S
             </div>
             <div class="text-center">
-              <p class="text-base font-serif" style="color:#dcc0c0;">Shaiyra Gupta</p>
-              <p class="text-xs" style="color:#ffffff50;">Born April 29, 2026 · ⭐ The Star</p>
+              <p class="text-2xl font-serif text-navy">Shaiyra Gupta</p>
+              <p class="text-[10px] font-bold tracking-widest uppercase text-sage mt-2">Born April 29, 2026 · The Star</p>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Member Cards Grid -->
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div v-for="member in store.family" :key="member.id"
-          class="group p-6 rounded-2xl border transition-all hover:-translate-y-0.5 hover:shadow-lg"
-          style="background-color:white; border-color:#03163208;">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div v-for="(member, index) in store.family" :key="member.id" v-reveal="'reveal-up'" v-tilt :style="`transition-delay: ${index * 0.1}s`"
+          class="group p-8 bg-white border border-sage/10 transition-all hover:shadow-xl card-lift">
           <!-- Avatar -->
-          <div class="flex items-center gap-4 mb-4">
-            <div class="w-12 h-12 rounded-full flex items-center justify-center text-xl font-serif border" :style="avatarStyle(member.side)">
+          <div class="flex items-center gap-5 mb-6">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center text-2xl font-serif" :class="avatarStyle(member.side)">
               {{ member.name[0] }}
             </div>
             <div>
-              <h3 class="font-serif text-lg" style="color:#031632;">{{ member.name }}</h3>
-              <p class="text-xs uppercase tracking-wider" style="color:#566252;">{{ member.relation }}</p>
+              <h3 class="font-serif text-xl text-navy">{{ member.name }}</h3>
+              <p class="text-[10px] font-bold tracking-widest uppercase text-sage">{{ member.relation }}</p>
             </div>
           </div>
           <!-- Bio -->
-          <p v-if="member.bio" class="text-sm leading-relaxed mb-4" style="color:#566252; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{{ member.bio }}</p>
+          <p v-if="member.bio" class="text-sm leading-relaxed mb-6 text-sage/80 font-light" style="display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{{ member.bio }}</p>
           <!-- Tags -->
           <div class="flex flex-wrap gap-2">
-            <span class="text-xs px-2 py-0.5 rounded-full" style="background-color:#fcf9f5; color:#566252; border:1px solid #56625215;">{{ member.generation === 0 ? 'Grandparent' : member.generation === 1 ? 'Parent' : member.generation === 2 ? 'Child' : 'Extended' }}</span>
-            <span v-if="member.role === 'admin'" class="text-xs px-2 py-0.5 rounded-full" style="background-color:#dcc0c020; color:#a08060;">Admin</span>
+            <span class="text-[10px] font-bold tracking-widest uppercase px-3 py-1 border border-sage/20 text-sage">{{ member.generation === 0 ? 'Grandparent' : member.generation === 1 ? 'Parent' : member.generation === 2 ? 'Child' : 'Extended' }}</span>
+            <span v-if="member.role === 'admin'" class="text-[10px] font-bold tracking-widest uppercase px-3 py-1 border border-blush/30 bg-blush/10 text-blush">Admin</span>
           </div>
           <!-- Admin Actions -->
-          <div v-if="store.isAdmin" class="flex items-center gap-2 mt-5 pt-4 border-t opacity-0 group-hover:opacity-100 transition-opacity" style="border-color:#03163210;">
-            <button @click="openEdit(member)" class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg" style="border:1px solid #03163220; color:#566252;">
-              <span class="material-symbols-outlined text-sm">edit</span> Edit
+          <div v-if="store.isAdmin" class="flex items-center gap-2 mt-6 pt-6 border-t border-sage/10 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button @click="openEdit(member)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-sage/10 text-sage transition-colors">
+              <span class="material-symbols-outlined text-sm">edit</span>
             </button>
-            <button @click="confirmDelete(member)" class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg" style="border:1px solid #ff000020; color:#ef4444;">
-              <span class="material-symbols-outlined text-sm">delete</span> Remove
+            <button @click="confirmDelete(member)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-50 text-red-400 transition-colors">
+              <span class="material-symbols-outlined text-sm">delete</span>
             </button>
           </div>
         </div>
@@ -109,19 +107,13 @@
 
     <!-- Add/Edit Modal -->
     <AppModal :show="showModal" :title="editingItem ? 'Edit Family Member' : 'Add Family Member'" size="lg" @close="closeModal">
-      <div class="space-y-4">
-        <div>
-          <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Full Name</label>
-          <input v-model="form.name" type="text" class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
-        </div>
-        <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-6">
+        <FloatingInput id="fam_name" label="Full Name" v-model="form.name" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FloatingInput id="fam_relation" label="Relation (Nana, Dadi, Mama...)" v-model="form.relation" />
           <div>
-            <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Relation</label>
-            <input v-model="form.relation" type="text" placeholder="Nana, Dadi, Mama..." class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
-          </div>
-          <div>
-            <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Side</label>
-            <select v-model="form.side" class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
+            <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Side</label>
+            <select v-model="form.side" class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
               <option value="paternal">Paternal</option>
               <option value="maternal">Maternal</option>
               <option value="center">Center (Shaiyra)</option>
@@ -129,38 +121,34 @@
             </select>
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Generation</label>
-            <select v-model.number="form.generation" class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
+            <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Generation</label>
+            <select v-model.number="form.generation" class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
               <option :value="0">Grandparents (Gen 0)</option>
               <option :value="1">Parents (Gen 1)</option>
               <option :value="2">Shaiyra (Gen 2)</option>
               <option :value="3">Extended</option>
             </select>
           </div>
-          <div>
-            <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Date of Birth</label>
-            <input v-model="form.dob" type="date" class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
-          </div>
+          <FloatingInput id="fam_dob" label="Date of Birth" type="date" v-model="form.dob" />
         </div>
-        <div>
-          <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Bio / Note</label>
-          <textarea v-model="form.bio" rows="3" class="w-full px-4 py-3 rounded-xl border text-sm outline-none resize-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;"></textarea>
-        </div>
+        <FloatingInput id="fam_bio" label="Bio / Note" type="textarea" rows="3" v-model="form.bio" />
       </div>
       <template #footer>
-        <button @click="closeModal" class="px-5 py-2.5 rounded-xl text-sm border" style="border-color:#03163220; color:#566252;">Cancel</button>
-        <button @click="saveItem" class="px-5 py-2.5 rounded-xl text-sm" style="background-color:#031632; color:#fcf9f5;">{{ editingItem ? 'Save Changes' : 'Add to Family' }}</button>
+        <button @click="closeModal" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
+        <button  @click="saveItem" class="px-8 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy/90 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">
+          {{ editingItem ? 'Save Changes' : 'Add to Family' }}
+        </button>
       </template>
     </AppModal>
 
     <!-- Delete Modal -->
     <AppModal :show="showDeleteModal" title="Remove Family Member" @close="showDeleteModal=false">
-      <p class="text-sm" style="color:#566252;">Remove <strong style="color:#031632;">{{ deleteTarget?.name }}</strong> from the family tree?</p>
+      <p class="text-navy/70 leading-relaxed">Remove <strong class="text-navy font-bold">{{ deleteTarget?.name }}</strong> from the family tree?</p>
       <template #footer>
-        <button @click="showDeleteModal=false" class="px-5 py-2.5 rounded-xl text-sm border" style="border-color:#03163220; color:#566252;">Cancel</button>
-        <button @click="doDelete" class="px-5 py-2.5 rounded-xl text-sm bg-red-600 text-white">Remove</button>
+        <button @click="showDeleteModal=false" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
+        <button  @click="doDelete" class="px-8 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">Remove</button>
       </template>
     </AppModal>
   </div>
@@ -171,6 +159,7 @@ import { ref, computed } from 'vue';
 import { useJournalStore } from '@/stores/journal';
 import NavBar from '@/components/NavBar.vue';
 import AppModal from '@/components/AppModal.vue';
+import FloatingInput from '@/components/FloatingInput.vue';
 
 const store = useJournalStore();
 store.init();

@@ -7,8 +7,7 @@
         <p class="text-xs font-black tracking-[0.25em] text-cream/50 uppercase mb-3 block">Every big moment</p>
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <h1 class="font-serif text-5xl md:text-6xl font-light text-cream">Milestones</h1>
-          <button v-if="store.isAdmin" @click="openAdd()"
-            class="flex items-center gap-2 px-6 py-3 rounded-none text-xs font-black tracking-widest uppercase transition-all bg-cream text-navy hover:bg-cream/90">
+          <button class="transition-transform hover:scale-105 active:scale-95 flex items-center gap-2 px-6 py-3 rounded-none text-xs font-black tracking-widest uppercase transition-all bg-cream text-navy hover:bg-cream/90">
             <span class="material-symbols-outlined text-base">add</span>
             Add Milestone
           </button>
@@ -30,7 +29,7 @@
     <!-- Milestone Grid -->
     <div class="max-w-6xl mx-auto px-6 py-16">
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <article v-for="milestone in filteredMilestones" :key="milestone.id"
+        <article v-for="(milestone, index) in filteredMilestones" :key="milestone.id" v-reveal="'reveal-up'" v-tilt :style="`transition-delay: ${index * 0.1}s`"
           class="group relative p-8 bg-white border border-sage/10 transition-all hover:shadow-xl card-lift">
           <!-- Category badge -->
           <div class="absolute top-6 right-6">
@@ -48,10 +47,10 @@
           <p class="text-sm leading-relaxed text-sage/80 font-light" style="display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{{ milestone.description }}</p>
           <!-- Admin Actions -->
           <div v-if="store.isAdmin" class="flex items-center gap-2 mt-6 pt-4 border-t border-sage/10 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button @click="openEdit(milestone)" class="flex items-center gap-1.5 text-xs px-4 py-2 border border-sage/20 text-sage hover:bg-surface-stone transition-colors">
+            <button  @click="openEdit(milestone)" class="flex items-center gap-1.5 text-xs px-4 py-2 border border-sage/20 text-sage hover:bg-surface-stone transition-colors transition-transform hover:scale-105 active:scale-95">
               <span class="material-symbols-outlined text-sm">edit</span> Edit
             </button>
-            <button @click="confirmDelete(milestone)" class="flex items-center gap-1.5 text-xs px-4 py-2 border border-red-200 text-red-500 hover:bg-red-50 transition-colors">
+            <button  @click="confirmDelete(milestone)" class="flex items-center gap-1.5 text-xs px-4 py-2 border border-red-200 text-red-500 hover:bg-red-50 transition-colors transition-transform hover:scale-105 active:scale-95">
               <span class="material-symbols-outlined text-sm">delete</span> Delete
             </button>
           </div>
@@ -63,7 +62,7 @@
         <span class="text-6xl block mb-6">⭐</span>
         <p class="font-serif text-3xl text-navy mb-3">No milestones yet</p>
         <p class="text-sage/70 mb-8">Every great journey begins with a first step.</p>
-        <button v-if="store.isAdmin" @click="openAdd()" class="bg-navy text-cream px-8 py-3 text-xs font-black tracking-widest uppercase hover:bg-navy-light transition-colors">Record First Milestone</button>
+        <button  v-if="store.isAdmin" @click="openAdd()" class="bg-navy text-cream px-8 py-3 text-xs font-black tracking-widest uppercase hover:bg-navy-light transition-colors transition-transform hover:scale-105 active:scale-95">Record First Milestone</button>
       </div>
     </div>
 
@@ -71,10 +70,7 @@
     <AppModal :show="showModal" :title="editingItem ? 'Edit Milestone' : 'New Milestone'" size="lg" @close="closeModal">
       <div class="space-y-6">
         <div class="grid grid-cols-2 gap-6">
-          <div>
-            <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Date</label>
-            <input v-model="form.date" type="date" class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
-          </div>
+          <FloatingInput id="milestone_date" label="Date" type="date" v-model="form.date" />
           <div>
             <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Category</label>
             <select v-model="form.category" class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
@@ -82,11 +78,7 @@
             </select>
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Milestone Title</label>
-          <input v-model="form.title" type="text" placeholder="First Smile, First Steps..."
-            class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
-        </div>
+        <FloatingInput id="milestone_title" label="Milestone Title (First Smile, First Steps...)" v-model="form.title" />
         <div>
           <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Icon (emoji)</label>
           <div class="flex flex-wrap gap-2">
@@ -96,15 +88,11 @@
             </button>
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-bold tracking-widest uppercase text-sage mb-2">Description</label>
-          <textarea v-model="form.description" rows="4" placeholder="Describe this special moment..."
-            class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors resize-none leading-relaxed"></textarea>
-        </div>
+        <FloatingInput id="milestone_desc" label="Description (Describe this special moment...)" type="textarea" rows="4" v-model="form.description" />
       </div>
       <template #footer>
         <button @click="closeModal" class="px-6 py-3 border border-sage/20 text-sage text-xs font-black tracking-widest uppercase hover:bg-surface-stone transition-colors">Cancel</button>
-        <button @click="saveItem" class="px-6 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy-light transition-colors">{{ editingItem ? 'Save Changes' : 'Record Milestone' }}</button>
+        <button  @click="saveItem" class="px-6 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy-light transition-colors transition-transform hover:scale-105 active:scale-95">{{ editingItem ? 'Save Changes' : 'Record Milestone' }}</button>
       </template>
     </AppModal>
 
@@ -113,7 +101,7 @@
       <p class="text-sage leading-relaxed">Delete <strong class="text-navy font-bold">{{ deleteTarget?.title }}</strong>? This cannot be undone.</p>
       <template #footer>
         <button @click="showDeleteModal=false" class="px-6 py-3 border border-sage/20 text-sage text-xs font-black tracking-widest uppercase hover:bg-surface-stone transition-colors">Cancel</button>
-        <button @click="doDelete" class="px-6 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors">Delete</button>
+        <button  @click="doDelete" class="px-6 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors transition-transform hover:scale-105 active:scale-95">Delete</button>
       </template>
     </AppModal>
   </div>
@@ -123,6 +111,7 @@
 import { ref, computed } from 'vue';
 import { useJournalStore } from '@/stores/journal';
 import AppModal from '@/components/AppModal.vue';
+import FloatingInput from '@/components/FloatingInput.vue';
 
 const store = useJournalStore();
 store.init();

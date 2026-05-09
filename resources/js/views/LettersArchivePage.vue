@@ -10,8 +10,7 @@
             <h1 class="font-serif text-5xl md:text-6xl font-light text-cream mb-4">Letters Archive</h1>
             <p class="text-sm text-cream/60 font-light">{{ store.letters.length }} letters — {{ store.unlockedLetters.length }} readable · {{ store.lockedLetters.length }} time-locked</p>
           </div>
-          <button v-if="store.isAdmin" @click="openAdd()"
-            class="flex items-center justify-center gap-2 px-6 py-3 bg-gold text-navy text-xs font-black tracking-widest uppercase transition-colors hover:bg-gold/90 w-full md:w-auto card-lift">
+          <button class="transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 px-6 py-3 bg-gold text-navy text-xs font-black tracking-widest uppercase transition-colors hover:bg-gold/90 w-full md:w-auto card-lift">
             <span class="material-symbols-outlined text-sm">add</span>
             Write Letter
           </button>
@@ -26,7 +25,7 @@
           <span class="material-symbols-outlined text-gold">mail</span> Ready to Read
         </h2>
         <div class="space-y-6">
-          <article v-for="letter in store.unlockedLetters" :key="letter.id"
+          <article v-for="(letter, index) in store.unlockedLetters" :key="letter.id" v-reveal="'reveal-up'" v-tilt :style="`transition-delay: ${index * 0.1}s`"
             class="group rounded-xl overflow-hidden cursor-pointer transition-all hover:bg-white/5 border border-white/10 card-lift"
             @click="openLetter(letter)">
             <div class="p-8">
@@ -39,10 +38,10 @@
                   <h3 class="font-serif text-3xl text-cream mb-2">{{ letter.title }}</h3>
                 </div>
                 <div v-if="store.isAdmin" class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button @click.stop="openEdit(letter)" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 text-gold transition-colors">
+                  <button  @click.stop="openEdit(letter)" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 text-gold transition-colors transition-transform hover:scale-105 active:scale-95">
                     <span class="material-symbols-outlined text-[20px]">edit</span>
                   </button>
-                  <button @click.stop="confirmDelete(letter)" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-500/20 text-red-400 transition-colors">
+                  <button  @click.stop="confirmDelete(letter)" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-500/20 text-red-400 transition-colors transition-transform hover:scale-105 active:scale-95">
                     <span class="material-symbols-outlined text-[20px]">delete</span>
                   </button>
                 </div>
@@ -62,12 +61,12 @@
 
       <!-- Time-locked Letters -->
       <div v-if="store.lockedLetters.length">
-        <h2 class="font-serif text-2xl text-cream mb-8 flex items-center gap-3 opacity-80">
+        <h2 v-reveal="'reveal-left'" class="font-serif text-2xl text-cream mb-8 flex items-center gap-3 opacity-80">
           <span class="material-symbols-outlined">lock</span> Time-Locked
         </h2>
         <div class="space-y-4">
-          <div v-for="letter in store.lockedLetters" :key="letter.id"
-            class="group p-6 rounded-xl border border-white/5 bg-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div v-for="(letter, index) in store.lockedLetters" :key="letter.id" v-reveal="'reveal-up'" v-tilt :style="`transition-delay: ${index * 0.1}s`"
+            class="group p-6 rounded-xl border border-white/5 bg-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4 card-lift">
             <div>
               <h3 class="font-serif text-xl text-cream mb-2 opacity-80">{{ letter.title }}</h3>
               <p class="text-xs font-light text-cream/50 uppercase tracking-wide">
@@ -84,10 +83,10 @@
                 <span class="material-symbols-outlined text-xl">lock</span>
               </div>
               <div v-if="store.isAdmin" class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button @click="openEdit(letter)" class="p-2 rounded-full hover:bg-white/10 text-gold transition-colors">
+                <button  @click="openEdit(letter)" class="p-2 rounded-full hover:bg-white/10 text-gold transition-colors transition-transform hover:scale-105 active:scale-95">
                   <span class="material-symbols-outlined text-sm">edit</span>
                 </button>
-                <button @click="confirmDelete(letter)" class="p-2 rounded-full hover:bg-red-500/20 text-red-400 transition-colors">
+                <button  @click="confirmDelete(letter)" class="p-2 rounded-full hover:bg-red-500/20 text-red-400 transition-colors transition-transform hover:scale-105 active:scale-95">
                   <span class="material-symbols-outlined text-sm">delete</span>
                 </button>
               </div>
@@ -100,7 +99,7 @@
         <span class="material-symbols-outlined text-6xl text-gold/30 block mb-6 font-light">mark_email_unread</span>
         <h2 class="font-serif text-3xl text-cream mb-4">No letters yet</h2>
         <p class="text-cream/60 font-light mb-8 max-w-sm mx-auto">Start writing letters to your daughter — for now, and for someday.</p>
-        <button v-if="store.isAdmin" @click="openAdd()" class="px-8 py-3 bg-gold text-navy text-xs font-black tracking-widest uppercase hover:bg-gold/90 transition-colors">
+        <button  v-if="store.isAdmin" @click="openAdd()" class="px-8 py-3 bg-gold text-navy text-xs font-black tracking-widest uppercase hover:bg-gold/90 transition-colors transition-transform hover:scale-105 active:scale-95">
           Write First Letter
         </button>
       </div>
@@ -118,29 +117,18 @@
         <div class="font-serif text-lg leading-[2.2] whitespace-pre-line text-navy/90">{{ activeLetter.content }}</div>
       </div>
       <template #footer>
-        <button @click="activeLetter=null" class="px-8 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy/90 transition-colors w-full md:w-auto">Close</button>
+        <button  @click="activeLetter=null" class="px-8 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy/90 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">Close</button>
       </template>
     </AppModal>
 
     <!-- Write/Edit Modal -->
     <AppModal :show="showModal" :title="editingItem ? 'Edit Letter' : 'Write a Letter'" size="xl" @close="closeModal">
       <div class="space-y-6">
-        <div>
-          <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Letter Title</label>
-          <input v-model="form.title" type="text" placeholder="On the Day You Were Born..." 
-            class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-        </div>
+      <div class="space-y-2">
+        <FloatingInput id="letter_title" label="Letter Title (On the Day You Were Born...)" v-model="form.title" />
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Date Written</label>
-            <input v-model="form.date" type="date" 
-              class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-          </div>
-          <div>
-            <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">From</label>
-            <input v-model="form.from" type="text" placeholder="Papa" 
-              class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-          </div>
+          <FloatingInput id="letter_date" label="Date Written" type="date" v-model="form.date" />
+          <FloatingInput id="letter_from" label="From (Papa)" v-model="form.from" />
           <div>
             <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Category</label>
             <select v-model="form.category" class="w-full px-4 py-3 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
@@ -152,11 +140,8 @@
             </select>
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Letter Content</label>
-          <textarea v-model="form.content" rows="12" placeholder="My dearest Shaiyra,&#10;&#10;..." 
-            class="w-full px-5 py-4 bg-surface-stone border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors resize-none leading-[2] font-serif"></textarea>
         </div>
+        <FloatingInput id="letter_content" label="Letter Content (My dearest Shaiyra...)" v-model="form.content" type="textarea" rows="12" class="font-serif leading-[2]" />
         <div class="p-6 bg-surface-warm border border-navy/10 rounded-xl">
           <div class="flex items-center gap-3 mb-4">
             <input v-model="form.locked" type="checkbox" id="lockLetter" class="w-4 h-4 accent-navy">
@@ -165,22 +150,14 @@
             </label>
           </div>
           <div v-if="form.locked" class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-navy/10">
-            <div>
-              <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Unlock Date</label>
-              <input v-model="form.unlockDate" type="date" 
-                class="w-full px-4 py-3 bg-white border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-            </div>
-            <div>
-              <label class="block text-xs font-bold tracking-widest uppercase text-navy/60 mb-2">Unlock Age (years)</label>
-              <input v-model.number="form.unlockAge" type="number" placeholder="18" 
-                class="w-full px-4 py-3 bg-white border border-navy/20 text-navy outline-none focus:border-navy/50 transition-colors">
-            </div>
+            <FloatingInput id="letter_unlock_date" label="Unlock Date" type="date" v-model="form.unlockDate" />
+            <FloatingInput id="letter_unlock_age" label="Unlock Age (years)" type="number" v-model.number="form.unlockAge" />
           </div>
         </div>
       </div>
       <template #footer>
         <button @click="closeModal" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
-        <button @click="saveItem" class="px-8 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy/90 transition-colors w-full md:w-auto">
+        <button  @click="saveItem" class="px-8 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy/90 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">
           {{ editingItem ? 'Save Changes' : 'Seal with Love' }}
         </button>
       </template>
@@ -191,7 +168,7 @@
       <p class="text-navy/70 leading-relaxed">Are you sure you want to delete the letter <strong class="text-navy font-bold">"{{ deleteTarget?.title }}"</strong>? This cannot be undone.</p>
       <template #footer>
         <button @click="showDeleteModal=false" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
-        <button @click="doDelete" class="px-8 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors w-full md:w-auto">Delete</button>
+        <button  @click="doDelete" class="px-8 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">Delete</button>
       </template>
     </AppModal>
   </div>
@@ -201,6 +178,7 @@
 import { ref } from 'vue';
 import { useJournalStore } from '@/stores/journal';
 import AppModal from '@/components/AppModal.vue';
+import FloatingInput from '@/components/FloatingInput.vue';
 
 const store = useJournalStore();
 store.init();

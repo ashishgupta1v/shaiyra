@@ -1,33 +1,31 @@
 <template>
-  <div class="min-h-screen" style="background-color:#fcf9f5; font-family:'Manrope',sans-serif;">
+  <div class="animate-fade-in bg-surface-warm min-h-screen pb-24">
     <NavBar />
 
     <!-- Header -->
-    <div class="pt-12 pb-8" style="background-color:#031632;">
-      <div class="max-w-5xl mx-auto px-6">
-        <p class="text-xs uppercase tracking-widest mb-2" style="color:#dcc0c0; opacity:0.5;">Every triumph, tiny & tall</p>
-        <div class="flex items-end justify-between">
-          <h1 class="font-serif text-5xl" style="color:#fcf9f5;">Achievements</h1>
-          <button v-if="store.isAdmin" @click="openAdd()"
-            class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm"
-            style="background-color:#dcc0c0; color:#031632;">
-            <span class="material-symbols-outlined text-base">add</span>
+    <div class="pt-24 pb-16 bg-navy relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-navy to-navy/80"></div>
+      <div class="relative max-w-5xl mx-auto px-6">
+        <p class="text-xs font-black tracking-[0.25em] text-gold uppercase mb-3 block">Every triumph, tiny & tall</p>
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <h1 class="font-serif text-5xl md:text-6xl font-light text-cream mb-4 md:mb-0">Achievements</h1>
+          <button class="transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 px-6 py-3 bg-gold text-navy text-xs font-black tracking-widest uppercase transition-colors hover:bg-gold/90 w-full md:w-auto card-lift">
+            <span class="material-symbols-outlined text-sm">add</span>
             Add Achievement
           </button>
         </div>
-        <p class="text-sm mt-3" style="color:#ffffff50;">
+        <p class="text-sm mt-6 font-bold tracking-widest uppercase text-sage/50">
           {{ store.milestones.filter(m => m.category === 'achievement').length }} recorded achievements
         </p>
       </div>
     </div>
 
     <!-- Year Filter -->
-    <div class="border-b" style="background-color:#031632; border-color:#ffffff10;">
-      <div class="max-w-5xl mx-auto px-6 pb-4 flex items-center gap-2 overflow-x-auto">
+    <div class="border-b border-sage/10 bg-surface-stone sticky top-0 z-10">
+      <div class="max-w-5xl mx-auto px-6 py-4 flex items-center gap-3 overflow-x-auto no-scrollbar">
         <button v-for="yr in yearFilters" :key="yr"
-          @click="activeYear = yr"
-          :class="['px-4 py-1.5 rounded-full text-xs uppercase tracking-wider whitespace-nowrap transition-all', activeYear===yr ? '' : 'border border-white/10 text-white/50 hover:text-white/80']"
-          :style="activeYear===yr ? 'background-color:#dcc0c0; color:#031632;' : ''">
+          @click="activeYear = yr" 
+          :class="['px-5 py-2 text-[10px] font-black tracking-widest uppercase whitespace-nowrap transition-all border transition-transform hover:scale-105 active:scale-95', activeYear===yr ? 'bg-navy text-cream border-navy card-lift' : 'border-sage/20 text-sage hover:bg-sage/5 hover:border-sage/40']">
           {{ yr === 'all' ? 'All Time' : yr }}
         </button>
       </div>
@@ -35,60 +33,61 @@
 
     <div class="max-w-5xl mx-auto px-6 py-12">
       <!-- Trophy Shelf (top achievements pinned) -->
-      <div v-if="trophyItems.length" class="mb-12">
-        <h2 class="font-serif text-2xl mb-6" style="color:#031632;">🏆 Trophy Shelf</h2>
-        <div class="grid sm:grid-cols-3 gap-4">
-          <div v-for="item in trophyItems" :key="item.id"
-            class="p-6 rounded-2xl text-center border-2 transition-all hover:-translate-y-1 hover:shadow-xl"
-            style="background-color:white; border-color:#c9a84c30;">
-            <div class="text-5xl mb-4">{{ item.icon }}</div>
-            <h3 class="font-serif text-lg mb-2" style="color:#031632;">{{ item.title }}</h3>
-            <p class="text-xs uppercase tracking-wider mb-2" style="color:#566252;">{{ formatDate(item.date) }}</p>
-            <p v-if="item.description" class="text-sm" style="color:#566252; opacity:0.8;">{{ item.description }}</p>
+      <div v-if="trophyItems.length" class="mb-16">
+        <h2 class="font-serif text-2xl text-navy mb-8 flex items-center gap-3">
+          <span class="text-3xl">🏆</span> Trophy Shelf
+        </h2>
+        <div class="grid sm:grid-cols-3 gap-6">
+          <div v-for="(item, index) in trophyItems" :key="item.id" v-tilt v-reveal="'reveal-up'" :style="`transition-delay: ${index * 0.1}s`"
+            class="p-8 bg-gradient-to-br from-white to-surface-warm rounded-none text-center border border-gold/30 transition-all hover:shadow-xl hover:border-gold/60 card-lift">
+            <div class="text-6xl mb-6 drop-shadow-md">{{ item.icon }}</div>
+            <h3 class="font-serif text-xl text-navy mb-3 leading-snug">{{ item.title }}</h3>
+            <p class="text-[10px] font-black tracking-widest uppercase text-sage/80 mb-4">{{ formatDate(item.date) }}</p>
+            <p v-if="item.description" class="text-sm text-sage/70 leading-relaxed">{{ item.description }}</p>
           </div>
         </div>
       </div>
 
       <!-- All Achievements List -->
       <div>
-        <h2 class="font-serif text-2xl mb-6" style="color:#031632;">All Achievements</h2>
-        <div class="space-y-3">
-          <div v-for="item in filteredAchievements" :key="item.id"
-            class="group flex items-start gap-5 p-5 rounded-2xl border transition-all hover:shadow-md"
-            style="background-color:white; border-color:#03163208;">
-            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style="background-color:#c9a84c15;">
+        <h2 class="font-serif text-2xl text-navy mb-8">All Achievements</h2>
+        <div class="space-y-4">
+          <div v-for="(item, index) in filteredAchievements" :key="item.id" v-reveal="'reveal-up'" v-tilt :style="`transition-delay: ${index * 0.05}s`"
+            class="group flex flex-col md:flex-row items-start gap-6 p-6 bg-white border border-sage/10 transition-all hover:shadow-lg card-lift relative">
+            <div class="w-16 h-16 flex items-center justify-center text-3xl flex-shrink-0 bg-surface-stone border border-sage/20 shadow-sm rounded-full">
               {{ item.icon }}
             </div>
-            <div class="flex-1">
-              <div class="flex items-start justify-between">
+            <div class="flex-1 w-full">
+              <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
                 <div>
-                  <h3 class="font-serif text-lg" style="color:#031632;">{{ item.title }}</h3>
-                  <p class="text-xs uppercase tracking-wider mt-0.5" style="color:#566252;">
+                  <h3 class="font-serif text-xl text-navy mb-2">{{ item.title }}</h3>
+                  <p class="text-[10px] font-black tracking-widest uppercase text-sage/80 flex flex-wrap items-center gap-2">
                     {{ formatDate(item.date) }}
-                    <span v-if="item.category" class="ml-2 px-2 py-0.5 rounded-full" style="background-color:#56625215;">{{ item.category }}</span>
+                    <span class="w-1 h-1 bg-sage/30 rounded-full" v-if="item.category"></span>
+                    <span v-if="item.category" class="px-2 py-0.5 border border-sage/20 bg-surface-stone text-sage">{{ item.category }}</span>
                   </p>
                 </div>
-                <div v-if="store.isAdmin" class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button @click="openEdit(item)" class="p-1.5 rounded-lg hover:bg-blue-50" style="color:#566252;">
+                <div v-if="store.isAdmin" class="flex items-center gap-2 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button @click="openEdit(item)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-sage/10 text-sage transition-colors">
                     <span class="material-symbols-outlined text-sm">edit</span>
                   </button>
-                  <button @click="confirmDelete(item)" class="p-1.5 rounded-lg hover:bg-red-50 text-red-400">
+                  <button @click="confirmDelete(item)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-50 text-red-400 transition-colors">
                     <span class="material-symbols-outlined text-sm">delete</span>
                   </button>
                 </div>
               </div>
-              <p v-if="item.description" class="text-sm mt-2 leading-relaxed" style="color:#566252;">{{ item.description }}</p>
+              <p v-if="item.description" class="text-sm mt-4 leading-relaxed text-sage/90 font-light">{{ item.description }}</p>
             </div>
           </div>
         </div>
 
         <!-- Empty -->
-        <div v-if="!filteredAchievements.length" class="text-center py-20 rounded-2xl border-2 border-dashed" style="border-color:#03163210;">
-          <span class="text-6xl block mb-4">🌟</span>
-          <p class="font-serif text-2xl mb-2" style="color:#031632;">No achievements yet</p>
-          <p class="text-sm mb-6" style="color:#566252;">Every achievement starts with a single step. Record Shaiyra's first!</p>
-          <button v-if="store.isAdmin" @click="openAdd()"
-            class="px-6 py-3 rounded-full text-sm" style="background-color:#031632; color:#fcf9f5;">
+        <div v-if="!filteredAchievements.length" class="text-center py-24 bg-white border border-sage/10 relative overflow-hidden group">
+          <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+          <span class="text-6xl block mb-6 transform group-hover:scale-110 transition-transform duration-700">🌟</span>
+          <p class="font-serif text-3xl text-navy mb-4 relative z-10">No achievements yet</p>
+          <p class="text-sm text-sage/80 mb-8 max-w-md mx-auto relative z-10 leading-relaxed font-light">Every achievement starts with a single step. Record Shaiyra's first!</p>
+          <button class="transition-transform hover:scale-105 active:scale-95 px-8 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy/90 transition-colors relative z-10 shadow-lg card-lift">
             Record First Achievement
           </button>
         </div>
@@ -97,21 +96,14 @@
 
     <!-- Add/Edit Modal -->
     <AppModal :show="showModal" :title="editingItem ? 'Edit Achievement' : 'New Achievement'" size="lg" @close="closeModal">
-      <div class="space-y-4">
-        <div>
-          <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Achievement Title</label>
-          <input v-model="form.title" type="text" placeholder="First steps, Gold medal, Graduation..."
-            class="w-full px-4 py-3 rounded-xl border text-sm outline-none"
-            style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
-        </div>
-        <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-6">
+        <FloatingInput id="ach_title" label="Achievement Title (First steps, Gold medal...)" v-model="form.title" />
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FloatingInput id="ach_date" label="Date" type="date" v-model="form.date" />
           <div>
-            <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Date</label>
-            <input v-model="form.date" type="date" class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
-          </div>
-          <div>
-            <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Category</label>
-            <select v-model="form.category" class="w-full px-4 py-3 rounded-xl border text-sm outline-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
+            <label class="block text-[10px] font-black tracking-widest uppercase text-sage mb-2">Category</label>
+            <select v-model="form.category" class="w-full px-4 py-3 bg-surface-stone border border-sage/20 text-navy outline-none focus:border-sage/50 transition-colors">
               <option value="achievement">Achievement</option>
               <option value="school">School</option>
               <option value="sports">Sports</option>
@@ -121,22 +113,22 @@
             </select>
           </div>
         </div>
+        
         <div>
-          <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Icon (emoji)</label>
+          <label class="block text-[10px] font-black tracking-widest uppercase text-sage mb-3">Icon</label>
           <div class="flex flex-wrap gap-2">
-            <button v-for="ic in iconOptions" :key="ic" @click="form.icon = ic"
-              :class="['w-10 h-10 rounded-xl text-xl transition-all hover:scale-110', form.icon===ic ? 'ring-2 scale-110' : '']"
-              style="background-color:#fcf9f5;">{{ ic }}</button>
+            <button v-for="ic in iconOptions" :key="ic" @click="form.icon = ic" 
+              :class="['w-12 h-12 flex items-center justify-center rounded-none text-2xl transition-all border transition-transform hover:scale-105 active:scale-95', form.icon===ic ? 'border-navy bg-navy/5 scale-110 shadow-sm' : 'border-sage/20 bg-surface-stone hover:border-sage/50']">
+              {{ ic }}
+            </button>
           </div>
         </div>
-        <div>
-          <label class="block text-xs uppercase tracking-wider mb-2" style="color:#566252;">Description</label>
-          <textarea v-model="form.description" rows="3" class="w-full px-4 py-3 rounded-xl border text-sm outline-none resize-none" style="border-color:#03163220; background-color:#fcf9f5; color:#031632;"></textarea>
-        </div>
+        
+        <FloatingInput id="ach_desc" label="Description" type="textarea" rows="4" v-model="form.description" />
       </div>
       <template #footer>
-        <button @click="closeModal" class="px-5 py-2.5 rounded-xl text-sm border" style="border-color:#03163220; color:#566252;">Cancel</button>
-        <button @click="saveItem" class="px-5 py-2.5 rounded-xl text-sm" style="background-color:#031632; color:#fcf9f5;">
+        <button @click="closeModal" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
+        <button  @click="saveItem" class="px-8 py-3 bg-navy text-cream text-xs font-black tracking-widest uppercase hover:bg-navy/90 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">
           {{ editingItem ? 'Save Changes' : 'Record Achievement' }}
         </button>
       </template>
@@ -144,10 +136,10 @@
 
     <!-- Delete Modal -->
     <AppModal :show="showDeleteModal" title="Delete Achievement" @close="showDeleteModal=false">
-      <p class="text-sm" style="color:#566252;">Delete <strong style="color:#031632;">{{ deleteTarget?.title }}</strong>? This cannot be undone.</p>
+      <p class="text-navy/70 leading-relaxed">Delete <strong class="text-navy font-bold">{{ deleteTarget?.title }}</strong>? This cannot be undone.</p>
       <template #footer>
-        <button @click="showDeleteModal=false" class="px-5 py-2.5 rounded-xl text-sm border" style="border-color:#03163220; color:#566252;">Cancel</button>
-        <button @click="doDelete" class="px-5 py-2.5 rounded-xl text-sm bg-red-600 text-white">Delete</button>
+        <button @click="showDeleteModal=false" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
+        <button  @click="doDelete" class="px-8 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 transition-colors w-full md:w-auto transition-transform hover:scale-105 active:scale-95">Delete</button>
       </template>
     </AppModal>
   </div>
@@ -158,6 +150,7 @@ import { ref, computed } from 'vue';
 import { useJournalStore } from '@/stores/journal';
 import NavBar from '@/components/NavBar.vue';
 import AppModal from '@/components/AppModal.vue';
+import FloatingInput from '@/components/FloatingInput.vue';
 
 const store = useJournalStore();
 store.init();

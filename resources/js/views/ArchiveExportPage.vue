@@ -1,96 +1,93 @@
 <template>
-  <div class="min-h-screen" style="background-color:#031632; font-family:'Manrope',sans-serif;">
+  <div class="animate-fade-in bg-navy min-h-screen pb-24 text-cream">
     <NavBar />
-
-    <div class="max-w-3xl mx-auto px-6 pt-12 pb-16">
+    <div class="max-w-4xl mx-auto px-6 pt-24 pb-16 relative">
+      <div class="absolute inset-0 bg-gradient-to-br from-navy via-navy to-sage/10 -z-10"></div>
       <!-- Header -->
-      <div class="mb-10">
-        <p class="text-xs uppercase tracking-widest mb-2" style="color:#dcc0c0; opacity:0.5;">Preserve Shaiyra's story</p>
-        <h1 class="font-serif text-5xl mb-3" style="color:#fcf9f5;">Archive & Export</h1>
-        <p class="text-sm" style="color:#ffffff50;">Back up, export, and preserve everything in Shaiyra's journal.</p>
+      <div class="mb-12" v-reveal="'reveal-up'">
+        <p class="text-xs font-black tracking-[0.25em] text-gold uppercase mb-3 block">Preserve Shaiyra's story</p>
+        <h1 class="font-serif text-5xl md:text-6xl font-light text-cream mb-4">Archive & Export</h1>
+        <p class="text-sm text-cream/60 font-light">Back up, export, and preserve everything in Shaiyra's journal.</p>
       </div>
 
       <!-- Stats Overview -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
-        <div v-for="stat in statCards" :key="stat.label" class="p-4 rounded-2xl text-center" style="background-color:#ffffff08; border:1px solid #ffffff10;">
-          <div class="text-2xl mb-1">{{ stat.icon }}</div>
-          <div class="font-serif text-2xl mb-1" style="color:#dcc0c0;">{{ stat.value }}</div>
-          <div class="text-xs uppercase tracking-wider" style="color:#ffffff40;">{{ stat.label }}</div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+        <div v-for="(stat, index) in statCards" :key="stat.label" v-reveal="'reveal-up'" v-tilt :style="`transition-delay: ${index * 0.1}s`"
+          class="p-6 text-center border border-white/10 bg-white/5 card-lift">
+          <div class="text-3xl mb-2">{{ stat.icon }}</div>
+          <div class="font-serif text-3xl text-gold mb-1">{{ stat.value }}</div>
+          <div class="text-[10px] font-bold uppercase tracking-widest text-cream/40">{{ stat.label }}</div>
         </div>
       </div>
 
       <!-- Export Section -->
-      <div class="space-y-4 mb-10">
-        <h2 class="font-serif text-2xl" style="color:#fcf9f5;">Export Your Data</h2>
+      <div class="space-y-6 mb-16">
+        <h2 v-reveal="'reveal-right'" class="font-serif text-3xl text-cream mb-4">Export Your Data</h2>
 
         <!-- JSON Export -->
-        <div class="p-6 rounded-2xl" style="background-color:#ffffff08; border:1px solid #ffffff10;">
-          <div class="flex items-start justify-between">
-            <div>
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-xl">📦</span>
-                <h3 class="font-medium" style="color:#fcf9f5;">Full Journal Export (JSON)</h3>
-              </div>
-              <p class="text-sm" style="color:#ffffff50;">Downloads all journal entries, milestones, growth records, letters, family tree, wellness records and gallery metadata as a single JSON file.</p>
+        <div v-reveal="'reveal-up'" v-tilt class="p-8 border border-white/10 bg-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6 card-lift">
+          <div>
+            <div class="flex items-center gap-3 mb-2">
+              <span class="text-2xl">📦</span>
+              <h3 class="font-serif text-2xl text-cream">Full Journal Export (JSON)</h3>
             </div>
-            <button @click="store.exportData()"
-              class="ml-4 flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all hover:opacity-90"
-              style="background-color:#dcc0c0; color:#031632;">
-              <span class="material-symbols-outlined text-base">download</span>
-              Export
-            </button>
+            <p class="text-sm text-cream/60 leading-relaxed max-w-xl">Downloads all journal entries, milestones, growth records, letters, family tree, wellness records and gallery metadata as a single JSON file.</p>
           </div>
+          <button class="transition-transform hover:scale-105 active:scale-95 flex-shrink-0 flex items-center justify-center gap-2 px-8 py-3 bg-gold text-navy text-xs font-black tracking-widest uppercase transition-colors hover:bg-gold/90 w-full md:w-auto">
+            <span class="material-symbols-outlined text-base">download</span>
+            Export Backup
+          </button>
         </div>
 
         <!-- Import Section -->
-        <div class="p-6 rounded-2xl" style="background-color:#ffffff08; border:1px solid #ffffff10;">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="text-xl">📥</span>
-            <h3 class="font-medium" style="color:#fcf9f5;">Import from Backup</h3>
+        <div v-reveal="'reveal-up'" v-tilt class="p-8 border border-white/10 bg-white/5 card-lift">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-2xl">📥</span>
+            <h3 class="font-serif text-2xl text-cream">Import from Backup</h3>
           </div>
-          <p class="text-sm mb-4" style="color:#ffffff50;">Restore the journal from a previously exported JSON backup file.</p>
+          <p class="text-sm text-cream/60 leading-relaxed mb-6">Restore the journal from a previously exported JSON backup file.</p>
           <div v-if="!importText">
-            <label class="flex items-center justify-center gap-2 px-6 py-4 rounded-xl cursor-pointer transition-all hover:opacity-80" style="border:2px dashed #dcc0c030; color:#dcc0c0;">
-              <span class="material-symbols-outlined text-base">upload_file</span>
-              <span class="text-sm">Choose backup file (.json)</span>
+            <label class="flex flex-col items-center justify-center gap-3 p-8 cursor-pointer transition-all hover:bg-white/5 border border-dashed border-gold/30">
+              <span class="material-symbols-outlined text-3xl text-gold/60">upload_file</span>
+              <span class="text-xs font-bold tracking-widest uppercase text-gold">Choose backup file (.json)</span>
               <input type="file" accept=".json" @change="loadFile" class="hidden">
             </label>
           </div>
-          <div v-else class="space-y-3">
-            <div class="p-3 rounded-xl text-xs font-mono overflow-hidden" style="background-color:#ffffff05; color:#dcc0c0; max-height:100px; overflow-y:auto;">{{ importText.slice(0,400) }}...</div>
-            <div class="flex gap-3">
-              <button @click="doImport" class="px-4 py-2.5 rounded-xl text-sm" style="background-color:#566252; color:#fcf9f5;">Apply Import</button>
-              <button @click="importText=''" class="px-4 py-2.5 rounded-xl text-sm border" style="border-color:#ffffff20; color:#ffffff60;">Cancel</button>
+          <div v-else class="space-y-4">
+            <div class="p-4 bg-navy/50 border border-white/10 text-xs font-mono text-gold/80 max-h-32 overflow-y-auto">
+              {{ importText.slice(0,400) }}...
+            </div>
+            <div class="flex gap-4">
+              <button  @click="doImport" class="px-8 py-3 bg-sage text-cream text-xs font-black tracking-widest uppercase transition-colors hover:bg-sage/90 flex-1 md:flex-none text-center transition-transform hover:scale-105 active:scale-95">Apply Import</button>
+              <button  @click="importText=''" class="px-8 py-3 border border-white/20 text-cream/60 text-xs font-bold tracking-widest uppercase hover:bg-white/10 transition-colors flex-1 md:flex-none text-center transition-transform hover:scale-105 active:scale-95">Cancel</button>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Data Management -->
-      <div class="space-y-4 mb-10">
-        <h2 class="font-serif text-2xl" style="color:#fcf9f5;">Data Management</h2>
+      <div class="space-y-6 mb-16">
+        <h2 v-reveal="'reveal-right'" class="font-serif text-3xl text-cream mb-4">Data Management</h2>
 
-        <div class="p-6 rounded-2xl" style="background-color:#ffffff08; border:1px solid #ffffff10;">
-          <h3 class="font-medium mb-1" style="color:#fcf9f5;">📊 Storage Status</h3>
-          <p class="text-sm mb-4" style="color:#ffffff50;">Local storage usage for Shaiyra's journal data.</p>
-          <div class="rounded-xl overflow-hidden mb-2" style="background-color:#ffffff10; height:8px;">
-            <div class="h-full rounded-xl transition-all" :style="{ width: storagePercent + '%', backgroundColor: storagePercent > 80 ? '#ef4444' : '#dcc0c0' }"></div>
+        <div v-reveal="'reveal-up'" v-tilt class="p-8 border border-white/10 bg-white/5 card-lift">
+          <h3 class="font-serif text-2xl text-cream mb-2 flex items-center gap-3">📊 Storage Status</h3>
+          <p class="text-sm text-cream/60 mb-6">Local storage usage for Shaiyra's journal data.</p>
+          <div class="h-2 bg-white/10 overflow-hidden mb-3">
+            <div class="h-full transition-all" :class="storagePercent > 80 ? 'bg-red-500' : 'bg-gold'" :style="{ width: storagePercent + '%' }"></div>
           </div>
-          <p class="text-xs" style="color:#ffffff40;">{{ storageUsed }} KB used of ~5 MB local storage</p>
+          <p class="text-[10px] font-bold tracking-widest uppercase text-cream/40">{{ storageUsed }} KB used of ~5 MB local storage</p>
         </div>
 
-        <div class="p-6 rounded-2xl" style="background-color:#ffffff08; border:1px solid #ff000015;">
-          <div class="flex items-start justify-between">
+        <div v-reveal="'reveal-up'" v-tilt class="p-8 border border-red-500/20 bg-red-500/5 card-lift">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <h3 class="font-medium mb-1 flex items-center gap-2" style="color:#ef4444;">
+              <h3 class="font-serif text-2xl text-red-400 mb-2 flex items-center gap-3">
                 <span class="material-symbols-outlined text-base">warning</span>
                 Clear All Data
               </h3>
-              <p class="text-sm" style="color:#ffffff50;">Permanently delete all journal data from this device. This cannot be undone — export first!</p>
+              <p class="text-sm text-cream/60 leading-relaxed max-w-xl">Permanently delete all journal data from this device. This cannot be undone — export first!</p>
             </div>
-            <button @click="showClearConfirm=true"
-              class="ml-4 flex-shrink-0 px-4 py-2.5 rounded-xl text-sm transition-all hover:opacity-90"
-              style="background-color:#ef444420; border:1px solid #ef444430; color:#ef4444;">
+            <button class="transition-transform hover:scale-105 active:scale-95 flex-shrink-0 px-8 py-3 border border-red-500/30 text-red-400 text-xs font-black tracking-widest uppercase hover:bg-red-500/10 transition-colors w-full md:w-auto">
               Clear Data
             </button>
           </div>
@@ -98,13 +95,13 @@
       </div>
 
       <!-- Tips -->
-      <div class="p-6 rounded-2xl" style="background-color:#ffffff05; border:1px solid #ffffff08;">
-        <h3 class="font-medium mb-4 flex items-center gap-2" style="color:#dcc0c0;">
-          <span class="text-lg">💡</span> Preservation Tips
+      <div v-reveal="'reveal-up'" v-tilt class="p-8 border border-white/5 bg-white/5 card-lift">
+        <h3 class="font-serif text-2xl text-gold mb-6 flex items-center gap-3">
+          <span class="text-2xl">💡</span> Preservation Tips
         </h3>
-        <ul class="space-y-3">
-          <li v-for="tip in tips" :key="tip" class="flex items-start gap-2 text-sm" style="color:#ffffff60;">
-            <span class="text-[#dcc0c0] mt-0.5 flex-shrink-0">✦</span>
+        <ul class="space-y-4">
+          <li v-for="tip in tips" :key="tip" class="flex items-start gap-4 text-sm text-cream/70 font-light leading-relaxed">
+            <span class="text-gold mt-1 flex-shrink-0 text-[10px]">✦</span>
             {{ tip }}
           </li>
         </ul>
@@ -113,20 +110,19 @@
 
     <!-- Clear Confirm Modal -->
     <AppModal :show="showClearConfirm" title="Clear All Data" @close="showClearConfirm=false">
-      <div class="space-y-4">
-        <div class="p-4 rounded-xl" style="background-color:#ef444415; border:1px solid #ef444430;">
-          <p class="text-sm font-medium mb-1" style="color:#ef4444;">⚠️ This will permanently delete everything</p>
-          <p class="text-xs" style="color:#ef444490;">All journal entries, milestones, growth records, letters, family members, wellness records and gallery items will be removed from this device.</p>
+      <div class="space-y-6">
+        <div class="p-6 bg-red-500/10 border border-red-500/20">
+          <p class="text-sm font-bold text-red-400 uppercase tracking-widest mb-2">⚠️ This will permanently delete everything</p>
+          <p class="text-sm text-red-400/80 leading-relaxed">All journal entries, milestones, growth records, letters, family members, wellness records and gallery items will be removed from this device.</p>
         </div>
-        <p class="text-sm" style="color:#566252;">Type <strong style="color:#031632;">DELETE</strong> to confirm:</p>
-        <input v-model="clearConfirmText" type="text" placeholder="Type DELETE"
-          class="w-full px-4 py-3 rounded-xl border text-sm outline-none"
-          style="border-color:#03163220; background-color:#fcf9f5; color:#031632;">
+        <div>
+          <p class="text-sm text-navy/80 mb-3">Type <strong class="text-navy font-black">DELETE</strong> to confirm:</p>
+          <FloatingInput id="clear_confirm" label="Type DELETE" v-model="clearConfirmText" />
+        </div>
       </div>
       <template #footer>
-        <button @click="showClearConfirm=false" class="px-5 py-2.5 rounded-xl text-sm border" style="border-color:#03163220; color:#566252;">Cancel</button>
-        <button @click="doClear" :disabled="clearConfirmText !== 'DELETE'"
-          class="px-5 py-2.5 rounded-xl text-sm bg-red-600 text-white disabled:opacity-40">
+        <button @click="showClearConfirm=false" class="px-8 py-3 border border-navy/20 text-navy text-xs font-bold tracking-widest uppercase hover:bg-navy/5 transition-colors w-full md:w-auto">Cancel</button>
+        <button class="transition-transform hover:scale-105 active:scale-95 px-8 py-3 bg-red-600 text-white text-xs font-black tracking-widest uppercase hover:bg-red-700 disabled:opacity-40 transition-colors w-full md:w-auto">
           Clear All Data
         </button>
       </template>
@@ -139,6 +135,7 @@ import { ref, computed } from 'vue';
 import { useJournalStore } from '@/stores/journal';
 import NavBar from '@/components/NavBar.vue';
 import AppModal from '@/components/AppModal.vue';
+import FloatingInput from '@/components/FloatingInput.vue';
 
 const store = useJournalStore();
 store.init();
